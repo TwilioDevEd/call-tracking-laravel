@@ -15,6 +15,7 @@ return [
     */
 
     'twilio' => [
-        'TWILIO_TOKEN' => env('TWILIO_TOKEN')
+        'TWILIO_TOKEN' => env('TWILIO_TOKEN'),
+        'TWILIO_APP_SID' => env('TWILIO_APP_SID')
     ]
 ];
