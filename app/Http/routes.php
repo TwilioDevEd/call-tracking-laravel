@@ -19,3 +19,8 @@ Route::resource(
     'available_number', 'AvailableNumberController',
     ['only' => ['index', 'store']]
 );
+
+Route::resource(
+    'lead_source', 'LeadSourceController',
+    ['only' => ['store']]
+);

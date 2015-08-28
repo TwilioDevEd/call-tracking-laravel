@@ -19,21 +19,18 @@ class AvailableNumberController extends Controller
     {
         $twilio = \App::make('Twilio');
 
-        $numbers = $twilio->account->available_phone_numbers->getList('US', 'Local');
-        error_log(var_dump($numbers));
+        $areaCode = $request->input('areaCode');
 
-        return response()->view('available_numbers.index');
+        $numbers = $twilio
+            ->account
+            ->available_phone_numbers
+            ->getList('US', 'Local', ['AreaCode' => $areaCode])
+            ->available_phone_numbers;
+
+        return response()->view(
+            'available_numbers.index',
+            ['numbers' => $numbers,
+             'areaCode' => $areaCode]
+        );
     }
-
-    /**
-     * Buy a number and store it locally
-     *
-     * @param  Request $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
 }
