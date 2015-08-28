@@ -16,11 +16,10 @@ Route::get('/', function () {
 });
 
 Route::resource(
-    'available_number', 'AvailableNumberController',
-    ['only' => ['index', 'store']]
+    'available_number', 'AvailableNumberController', ['only' => ['index']]
 );
 
 Route::resource(
     'lead_source', 'LeadSourceController',
-    ['only' => ['store']]
+    ['only' => ['store', 'edit', 'update', 'destroy']]
 );
