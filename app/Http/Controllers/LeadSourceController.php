@@ -19,10 +19,13 @@ class LeadSourceController extends Controller
     public function index(Request $request)
     {
         $leadSources = LeadSource::all();
+        $appSid = $this->_appSid();
 
         return response()->view(
             'lead_sources.index',
-            ['leadSources' => $leadSources]
+            ['leadSources' => $leadSources,
+             'appSid' => $appSid
+            ]
         );
     }
 
@@ -36,9 +39,12 @@ class LeadSourceController extends Controller
     public function store(Request $request)
     {
         $twilio = \App::make('Twilio');
+        $appSid = $this->_appSid();
 
         $twilio->account->incoming_phone_numbers->create(
-            ['PhoneNumber' => $request->input('phoneNumber')]
+            ['PhoneNumber' => $request->input('phoneNumber'),
+             'VoiceCallerIdLookup' => true,
+             'VoiceApplicationSid' => $appSid]
         );
 
         $leadSource = new LeadSource(['number' => $request->input('phoneNumber')]);
@@ -98,5 +104,40 @@ class LeadSourceController extends Controller
         $leadSourceToDelete->delete();
 
         return redirect()->route('lead_source.index');
+    }
+
+    /**
+     * The Twilio TwiML App SID to use
+     * @return string
+     */
+    private function _appSid()
+    {
+        $twilio = \App::make('Twilio');
+        $appSid = config('app.twilio')['TWILIO_APP_SID'];
+
+        if (isset($appSid)) {
+            error_log('App SID found, returning');
+
+            return $appSid;
+        }
+
+        $matchingAppsIter = $twilio
+            ->account
+            ->applications
+            ->getIterator(0, 50, ['FriendlyName' => 'Call tracking app']);
+
+        $matchingApps = iterator_to_array($matchingAppsIter);
+
+        if (empty($matchingApps)) {
+            error_log('App not found, creating one');
+
+            return $twilio->account->applications->create(
+                ['friendly_name' => 'Call tracking app']
+            )->sid;
+        } else {
+            error_log('App found, returning');
+
+            return $matchingApps[0]->sid;
+        }
     }
 }

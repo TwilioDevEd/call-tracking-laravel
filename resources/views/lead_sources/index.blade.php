@@ -6,6 +6,7 @@
 
     <div class="col-md-8">
     {!! Html::link(route('available_number.index'), 'New', ['class' => 'btn btn-default']) !!}
+    {!! Html::link('https://www.twilio.com/user/account/apps/' . $appSid, 'App configuration', ['class' => 'btn btn-default']) !!}
         <table class="table">
             <thead>
                 <th>Lead source description</th>

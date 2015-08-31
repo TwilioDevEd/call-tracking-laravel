@@ -99,7 +99,8 @@ return [
 
     'twilio' => [
         'TWILIO_AUTH_TOKEN' => env('TWILIO_AUTH_TOKEN'),
-        'TWILIO_ACCOUNT_SID' => env('TWILIO_ACCOUNT_SID')
+        'TWILIO_ACCOUNT_SID' => env('TWILIO_ACCOUNT_SID'),
+        'TWILIO_APP_SID' => env('TWILIO_APP_SID')
     ],
 
     /*
@@ -148,10 +149,8 @@ return [
         App\Providers\AppServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\TwilioServiceProvider::class,
         App\Providers\TwilioAppServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class
-
     ],
 
     /*
