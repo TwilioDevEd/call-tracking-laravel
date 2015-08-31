@@ -10,6 +10,20 @@ use App\LeadSource;
 
 class LeadSourceController extends Controller
 {
+    /**
+     * Show all lead sources
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function index(Request $request)
+    {
+        $leadSources = LeadSource::all();
+        return response()->view(
+            'lead_sources.index',
+            ['leadSources' => $leadSources]
+        );
+    }
 
     /**
      * Store a new lead source (i.e phone number) and redirect to edit
@@ -29,7 +43,7 @@ class LeadSourceController extends Controller
         $leadSource = new LeadSource(['number' => $request->input('phoneNumber')]);
         $leadSource->save();
 
-        return $request->input('phoneNumber');
+        return redirect()->route('lead_source.edit', [$leadSource]);
     }
 
     /**
@@ -40,7 +54,12 @@ class LeadSourceController extends Controller
      */
     public function edit($id)
     {
-        //
+        $leadSourceToEdit = LeadSource::find($id);
+
+        return response()->view(
+            'lead_sources.edit',
+            ['leadSource' => $leadSourceToEdit]
+        );
     }
 
     /**
@@ -52,7 +71,11 @@ class LeadSourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $leadSourceToUpdate = LeadSource::find($id);
+        $leadSourceToUpdate->fill($request->all());
+        $leadSourceToUpdate->save();
+
+        return redirect()->route('lead_source.index');
     }
 
     /**
@@ -63,6 +86,16 @@ class LeadSourceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $twilio = \App::make('Twilio');
+        $leadSourceToDelete = LeadSource::find($id);
+        $number = $twilio
+            ->account
+            ->incoming_phone_numbers
+            ->getNumber($leadSourceToDelete->number);
+
+        $twilio->account->incoming_phone_numbers->delete($number->sid);
+        $leadSourceToDelete->delete();
+
+        return redirect()->route('lead_source.index');
     }
 }

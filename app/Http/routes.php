@@ -21,5 +21,5 @@ Route::resource(
 
 Route::resource(
     'lead_source', 'LeadSourceController',
-    ['only' => ['store', 'edit', 'update', 'destroy']]
+    ['only' => ['index', 'store', 'edit', 'update', 'destroy']]
 );
