@@ -6,8 +6,6 @@ use Illuminate\Support\ServiceProvider;
 
 class TwilioServiceProvider extends ServiceProvider
 {
-    protected $defer = false;
-
     /**
      * Initializes and registers the application object
      *
@@ -18,6 +16,7 @@ class TwilioServiceProvider extends ServiceProvider
         $this->app->bind(
             'TwilioApp', function ($app) {
                 $twilio = $app->make('Twilio');
+
                 $matchingAppsIter = $twilio
                     ->account
                     ->applications
@@ -27,11 +26,13 @@ class TwilioServiceProvider extends ServiceProvider
 
                 if (empty($matchingApps)) {
                     error_log('App not found, creating one');
+
                     return $twilio->account->applications->create(
                         ['friendly_name' => 'Call tracking app']
                     );
                 } else {
                     error_log('App found, returning');
+
                     return $matchingApps[0];
                 }
             }
