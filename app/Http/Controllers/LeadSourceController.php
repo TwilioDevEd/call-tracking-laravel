@@ -19,6 +19,7 @@ class LeadSourceController extends Controller
     public function index(Request $request)
     {
         $leadSources = LeadSource::all();
+        $twimlApp = \App::make('TwilioApp');
         return response()->view(
             'lead_sources.index',
             ['leadSources' => $leadSources]

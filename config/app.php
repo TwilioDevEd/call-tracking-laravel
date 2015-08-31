@@ -149,6 +149,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TwilioServiceProvider::class,
+        App\Providers\TwilioAppServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class
 
     ],
