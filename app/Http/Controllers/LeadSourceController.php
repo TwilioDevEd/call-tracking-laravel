@@ -116,8 +116,6 @@ class LeadSourceController extends Controller
         $appSid = config('app.twilio')['TWILIO_APP_SID'];
 
         if (isset($appSid)) {
-            error_log('App SID found, returning');
-
             return $appSid;
         }
 
@@ -129,14 +127,10 @@ class LeadSourceController extends Controller
         $matchingApps = iterator_to_array($matchingAppsIter);
 
         if (empty($matchingApps)) {
-            error_log('App not found, creating one');
-
             return $twilio->account->applications->create(
                 ['friendly_name' => 'Call tracking app']
             )->sid;
         } else {
-            error_log('App found, returning');
-
             return $matchingApps[0]->sid;
         }
     }

@@ -12,7 +12,8 @@
     "require-dev": {
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~4.0",
-        "twilio/sdk": "~4.3"
+        "twilio/sdk": "~4.3",
+        "php-vcr/php-vcr": "~1.2"
     },
     "autoload": {
         "classmap": [
