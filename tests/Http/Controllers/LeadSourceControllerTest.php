@@ -51,12 +51,45 @@ class LeadSourceControllerTest extends TestCase
         App::instance('Twilio', $mockTwilio);
 
         $response = $this->call('POST', route('lead_source.store'), ['phoneNumber' => '+15005550006']);
+        $this->assertTrue($response->isRedirect());
+
         $allLeadSources = LeadSource::all();
+        $firstLeadSource = LeadSource::first();
+
+        $this->assertEquals($response->getTargetUrl(), route('lead_source.edit', $firstLeadSource->id));
 
         $this->assertCount(1, $allLeadSources);
 
-        $this->assertEquals($allLeadSources[0]['number'], '+15005550006');
-        $this->assertEquals($allLeadSources[0]['description'], null);
-        $this->assertEquals($allLeadSources[0]['forwarding_number'], null);
+        $this->assertEquals($firstLeadSource['number'], '+15005550006');
+        $this->assertEquals($firstLeadSource['description'], null);
+        $this->assertEquals($firstLeadSource['forwarding_number'], null);
+    }
+
+    public function testEdit()
+    {
+        $newLeadSource = new LeadSource(
+            ['number' => '+136428733',
+             'description' => 'Some billboard somewhere',
+             'forwarding_number' => '+13947283']
+        );
+        $newLeadSource->save();
+        $leadSourceId = $newLeadSource->id;
+
+        $response = $this->call('GET', route('lead_source.edit', $leadSourceId));
+
+        $this->assertEquals($response->getOriginalContent()['leadSource']->id, $newLeadSource->id);
+
+        $this->assertEquals(
+            $response->getOriginalContent()['leadSource']->number,
+            $newLeadSource->number
+        );
+        $this->assertEquals(
+            $response->getOriginalContent()['leadSource']->description,
+            $newLeadSource->description
+        );
+        $this->assertEquals(
+            $response->getOriginalContent()['leadSource']->forwarding_number,
+            $newLeadSource->forwarding_number
+        );
     }
 }
