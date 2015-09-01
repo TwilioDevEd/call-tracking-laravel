@@ -12,6 +12,8 @@ class LeadSourceControllerTest extends TestCase
 
     public function testIndex()
     {
+        // Given
+
         $response = $this->call('GET', route('lead_source.index'));
         $leadSources = $response->getOriginalContent()['leadSources'];
 
@@ -24,7 +26,12 @@ class LeadSourceControllerTest extends TestCase
         );
         $newLeadSource->save();
 
+        // When
+
         $newResponse = $this->call('GET', route('lead_source.index'));
+
+        // Then
+
         $newLeadSources = $newResponse->getOriginalContent()['leadSources'];
         $this->assertCount(1, $newLeadSources);
 
@@ -35,6 +42,8 @@ class LeadSourceControllerTest extends TestCase
 
     public function testStore()
     {
+        // Given
+
         $mockTwilio = Mockery::mock('Services_Twilio');
         $mockTwilio->account = Mockery::mock();
         $mockTwilio->account->incoming_phone_numbers = Mockery::mock();
@@ -50,8 +59,12 @@ class LeadSourceControllerTest extends TestCase
 
         App::instance('Twilio', $mockTwilio);
 
+        // When
+
         $response = $this->call('POST', route('lead_source.store'), ['phoneNumber' => '+15005550006']);
         $this->assertTrue($response->isRedirect());
+
+        // Then
 
         $allLeadSources = LeadSource::all();
         $firstLeadSource = LeadSource::first();
@@ -67,6 +80,8 @@ class LeadSourceControllerTest extends TestCase
 
     public function testEdit()
     {
+        // Given
+
         $newLeadSource = new LeadSource(
             ['number' => '+136428733',
              'description' => 'Some billboard somewhere',
@@ -75,7 +90,11 @@ class LeadSourceControllerTest extends TestCase
         $newLeadSource->save();
         $leadSourceId = $newLeadSource->id;
 
+        // When
+
         $response = $this->call('GET', route('lead_source.edit', $leadSourceId));
+
+        // Then
 
         $this->assertEquals($response->getOriginalContent()['leadSource']->id, $newLeadSource->id);
 
@@ -91,5 +110,45 @@ class LeadSourceControllerTest extends TestCase
             $response->getOriginalContent()['leadSource']->forwarding_number,
             $newLeadSource->forwarding_number
         );
+    }
+
+    public function testDestroy()
+    {
+        // Given
+
+        $newLeadSource = new LeadSource(
+            ['number' => '+136428733',
+             'description' => 'Some billboard somewhere',
+             'forwarding_number' => '+13947283']
+        );
+        $newLeadSource->save();
+        $leadSourceId = $newLeadSource->id;
+
+        $mockNumber = Mockery::mock();
+        $mockNumber->sid = 'sup3runiq3s1d';
+
+        $mockTwilio = Mockery::mock('Services_Twilio');
+        $mockTwilio->account = Mockery::mock();
+        $mockTwilio->account->incoming_phone_numbers = Mockery::mock();
+
+        $mockTwilio->account->incoming_phone_numbers
+            ->shouldReceive('getNumber')
+            ->with($newLeadSource['number'])
+            ->andReturn($mockNumber);
+
+        $mockTwilio->account->incoming_phone_numbers
+            ->shouldReceive('delete')
+            ->with('sup3runiq3s1d');
+
+
+        App::instance('Twilio', $mockTwilio);
+
+        // When
+
+        $response = $this->call('DELETE', route('lead_source.destroy', $leadSourceId));
+
+        // Then
+
+        $this->assertCount(0, LeadSource::all());
     }
 }
