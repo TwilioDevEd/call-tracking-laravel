@@ -29,9 +29,9 @@ class LeadController extends Controller
      */
     public function store(Request $request)
     {
-        $leadSource = LeadSource::where(['number' => $request->input('To')]);
+        $leadSource = LeadSource::where(['number' => $request->input('To')])->first();
         $lead = new Lead();
-        $lead->source()->associate($leadSource);
+        $lead->leadSource()->associate($leadSource->id);
 
         $lead->city = $request->input('FromCity');
         $lead->state = $request->input('FromState');
@@ -41,7 +41,7 @@ class LeadController extends Controller
 
         $lead->save();
 
-        $forwardMessage = Services_Twilio_Twiml();
+        $forwardMessage = new \Services_Twilio_Twiml();
         $forwardMessage->dial($leadSource->forwarding_number);
 
         return response($forwardMessage, 201)->header('Content-Type', 'application/xml');

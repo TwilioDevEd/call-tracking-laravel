@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Lead;
 
 class LeadSource extends Model
 {
@@ -10,6 +11,6 @@ class LeadSource extends Model
 
     public function leads()
     {
-        return $this->hasMany('Lead');
+        return $this->hasMany('App\Lead');
     }
 }
