@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\App;
 
 use App\LeadSource;
@@ -10,7 +9,6 @@ use App\Lead;
 class LeadControllerTest extends TestCase
 {
     use DatabaseTransactions;
-    use WithoutMiddleware;
 
     public function testStore()
     {

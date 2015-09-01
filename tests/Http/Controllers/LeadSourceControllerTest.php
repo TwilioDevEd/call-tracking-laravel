@@ -61,8 +61,14 @@ class LeadSourceControllerTest extends TestCase
 
         // When
 
-        $response = $this->call('POST', route('lead_source.store'), ['phoneNumber' => '+15005550006']);
+        $response = $this->call(
+            'POST', route('lead_source.store'),
+            ['phoneNumber' => '+15005550006',
+             '_token' => csrf_token()]
+        );
+
         $this->assertTrue($response->isRedirect());
+
 
         // Then
 
