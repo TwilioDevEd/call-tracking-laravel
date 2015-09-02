@@ -48,12 +48,12 @@ class LeadController extends Controller
         return response($forwardMessage, 201)->header('Content-Type', 'application/xml');
     }
     /**
-     * Store a new lead with its lead source and forward the call
+     * Display all lead sources as JSON, grouped by lead source
      *
      * @param  Request  $request
      * @return Response
      */
-    public function summary(Request $request)
+    public function summaryByLeadSource()
     {
         $leadsBySource
             = DB::table('leads')
@@ -71,5 +71,23 @@ class LeadController extends Controller
             ->get();
 
         return response()->json($leadsBySource);
+    }
+
+    /**
+     * Display all lead sources as JSON, grouped by city
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function summaryByCity()
+    {
+        $leadsByCity
+            = DB::table('leads')
+            ->join('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
+            ->select(DB::raw('count(1) as lead_count'), 'leads.city')
+            ->groupBy('leads.city')
+            ->get();
+
+        return response()->json($leadsByCity);
     }
 }
