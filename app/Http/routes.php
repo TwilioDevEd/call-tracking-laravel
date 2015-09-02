@@ -14,6 +14,7 @@ Route::resource(
     'lead_source', 'LeadSourceController', ['except' => ['create', 'show']]
 );
 
+Route::get('lead/summary', 'LeadController@summary');
 Route::resource(
     'lead', 'LeadController', ['only' => ['index', 'store']]
 );

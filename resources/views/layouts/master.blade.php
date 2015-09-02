@@ -12,6 +12,7 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
+                    <li><a href="{{ route('lead.index') }}">Leads</a></li>
                     <li><a href="{{ route('available_number.index') }}">Numbers available for purchase</a></li>
                     <li><a href="{{ route('lead_source.index') }}">Lead sources</a></li>
                 </ul>
