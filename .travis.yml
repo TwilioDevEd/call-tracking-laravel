@@ -12,6 +12,7 @@ env:
   - DB_CONNECTION=pgsql
   - DATABASE_URL=postgres://postgres:@localhost:5432/call_tracking_test
   - TWILIO_APP_SID=somefak3apps1d
+  - APP_KEY=M0HYKpEoPSPnl7V4Ck6notarealkeyUx
 before_script:
 - psql -c 'create database call_tracking_test;' -U postgres
 - php artisan migrate
