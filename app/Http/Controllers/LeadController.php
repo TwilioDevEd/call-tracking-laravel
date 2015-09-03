@@ -17,11 +17,11 @@ class LeadController extends Controller
      *
      * @return Response
      */
-    public function index(Request $request)
+    public function dashboard(Request $request)
     {
         $context = [
             'leadSources' => LeadSource::all(),
-            'availableNumbers' => $this->availableNumbers($request),
+            'availableNumbers' => $this->_availableNumbers($request),
             'appSid' => $this->_appSid()
         ];
 
@@ -104,7 +104,7 @@ class LeadController extends Controller
         }
     }
 
-    private function availableNumbers(Request $request)
+    private function _availableNumbers(Request $request)
     {
         $twilio = \App::make('Twilio');
 

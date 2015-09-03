@@ -12,7 +12,7 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ route('lead.index') }}">Dashboard</a></li>
+                    <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
                 </ul>
             </div>
         </nav>

@@ -1,6 +1,6 @@
 <h2>Purchase phone numbers</h2>
 
-{!! Form::open(['url' => route('lead.index'), 'method' => 'GET']) !!}
+{!! Form::open(['url' => route('dashboard'), 'method' => 'GET']) !!}
     {!! Form::label('areaCode', 'Area code: ') !!}
     {!! Form::number('areaCode') !!}
     {!! Form::submit('Search', ['class' => 'btn btn-primary btn-xs']) !!}

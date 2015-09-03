@@ -63,7 +63,7 @@ class LeadSourceController extends Controller
         $leadSourceToUpdate->fill($request->all());
         $leadSourceToUpdate->save();
 
-        return redirect()->route('lead.index');
+        return redirect()->route('dashboard');
     }
 
     /**

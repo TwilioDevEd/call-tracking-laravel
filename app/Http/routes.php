@@ -2,7 +2,7 @@
 
 Route::get(
     '/', function () {
-        return redirect(route('available_number.index'));
+        return redirect(route('dashboard'));
     }
 );
 Route::resource(
@@ -24,6 +24,12 @@ Route::get(
      'uses' => 'LeadController@summaryByCity'
     ]
 );
+Route::get(
+    'dashboard',
+    ['as' => 'dashboard',
+     'uses' => 'LeadController@dashboard'
+    ]
+);
 Route::resource(
-    'lead', 'LeadController', ['only' => ['index', 'store']]
+    'lead', 'LeadController', ['only' => ['store']]
 );

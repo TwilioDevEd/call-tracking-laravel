@@ -13,11 +13,26 @@ class LeadControllerTest extends TestCase
     public function testLeadSourceIndex()
     {
         // Given
+        $mockNumberList = Mockery::mock();
+        $mockNumber = Mockery::mock();
 
-        $response = $this->call('GET', route('lead.index'));
-        $leadSources = $response->getOriginalContent()['leadSources'];
+        $mockNumber->friendly_name = '(555) 444 444';
+        $mockNumber->region = 'Some region';
+        $mockNumber->phone_number = '+1555444444';
 
-        $this->assertCount(0, $leadSources);
+        $mockNumbers = [$mockNumber];
+
+        $mockNumberList->available_phone_numbers = $mockNumbers;
+
+        $mockTwilio = Mockery::mock('Services_Twilio');
+        $mockTwilio->account = Mockery::mock();
+        $mockTwilio->account->available_phone_numbers = Mockery::mock();
+        $mockTwilio->account->available_phone_numbers
+            ->shouldReceive('getList')
+            ->with('US', 'Local', ['AreaCode' => null])
+            ->andReturn($mockNumberList);
+
+        App::instance('Twilio', $mockTwilio);
 
         $newLeadSource = new LeadSource(
             ['number' => '+136428733',
@@ -28,7 +43,7 @@ class LeadControllerTest extends TestCase
 
         // When
 
-        $newResponse = $this->call('GET', route('lead.index'));
+        $newResponse = $this->call('GET', route('dashboard'));
 
         // Then
 
@@ -38,7 +53,41 @@ class LeadControllerTest extends TestCase
         $this->assertEquals($newLeadSources[0]['number'], '+136428733');
         $this->assertEquals($newLeadSources[0]['description'], 'Some billboard somewhere');
         $this->assertEquals($newLeadSources[0]['forwarding_number'], '+13947283');
+    }
 
+    public function testAvailableNumberIndex()
+    {
+        // Given
+
+        $mockNumberList = Mockery::mock();
+        $mockNumber = Mockery::mock();
+
+        $mockNumber->friendly_name = '(555) 444 444';
+        $mockNumber->region = 'Some region';
+        $mockNumber->phone_number = '+1555444444';
+
+        $mockNumbers = [$mockNumber];
+
+        $mockNumberList->available_phone_numbers = $mockNumbers;
+
+        $mockTwilio = Mockery::mock('Services_Twilio');
+        $mockTwilio->account = Mockery::mock();
+        $mockTwilio->account->available_phone_numbers = Mockery::mock();
+        $mockTwilio->account->available_phone_numbers
+            ->shouldReceive('getList')
+            ->with('US', 'Local', ['AreaCode' => null])
+            ->andReturn($mockNumberList);
+
+        App::instance('Twilio', $mockTwilio);
+
+        // When
+        $response = $this->call('GET', route('dashboard'));
+
+        // Then
+        $this->assertEquals(
+            $response->getOriginalContent()['availableNumbers'],
+            $mockNumbers
+        );
     }
     
 
