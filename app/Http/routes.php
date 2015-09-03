@@ -10,7 +10,7 @@ Route::resource(
 );
 
 Route::resource(
-    'lead_source', 'LeadSourceController', ['except' => ['create', 'show']]
+    'lead_source', 'LeadSourceController', ['except' => ['index', 'create', 'show']]
 );
 Route::get(
     'lead/summary-by-lead-source',

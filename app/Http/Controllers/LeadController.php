@@ -19,7 +19,12 @@ class LeadController extends Controller
      */
     public function index()
     {
-        return response()->view('leads.index');
+        $context = [
+            'leadSources' => LeadSource::all(),
+            'appSid' => $this->_appSid()
+        ];
+
+        return response()->view('leads.index', $context);
     }
 
     /**
@@ -55,22 +60,7 @@ class LeadController extends Controller
      */
     public function summaryByLeadSource()
     {
-        $leadsBySource
-            = DB::table('leads')
-            ->join('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
-            ->select(
-                DB::raw('count(1) as lead_count'),
-                'lead_sources.description',
-                'lead_sources.number'
-            )
-            ->groupBy(
-                'lead_source_id',
-                'lead_sources.description',
-                'lead_sources.number'
-            )
-            ->get();
-
-        return response()->json($leadsBySource);
+        return response()->json(Lead::byLeadSource());
     }
 
     /**
@@ -81,13 +71,35 @@ class LeadController extends Controller
      */
     public function summaryByCity()
     {
-        $leadsByCity
-            = DB::table('leads')
-            ->join('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
-            ->select(DB::raw('count(1) as lead_count'), 'leads.city')
-            ->groupBy('leads.city')
-            ->get();
+        return response()->json(Lead::byCity());
+    }
 
-        return response()->json($leadsByCity);
+    /**
+     * The Twilio TwiML App SID to use
+     * @return string
+     */
+    private function _appSid()
+    {
+        $twilio = \App::make('Twilio');
+        $appSid = config('app.twilio')['TWILIO_APP_SID'];
+
+        if (isset($appSid)) {
+            return $appSid;
+        }
+
+        $matchingAppsIter = $twilio
+            ->account
+            ->applications
+            ->getIterator(0, 50, ['FriendlyName' => 'Call tracking app']);
+
+        $matchingApps = iterator_to_array($matchingAppsIter);
+
+        if (empty($matchingApps)) {
+            return $twilio->account->applications->create(
+                ['friendly_name' => 'Call tracking app']
+            )->sid;
+        } else {
+            return $matchingApps[0]->sid;
+        }
     }
 }

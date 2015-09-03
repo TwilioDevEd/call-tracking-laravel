@@ -11,25 +11,6 @@ use App\LeadSource;
 class LeadSourceController extends Controller
 {
     /**
-     * Show all lead sources
-     *
-     * @param  Request  $request
-     * @return Response
-     */
-    public function index(Request $request)
-    {
-        $leadSources = LeadSource::all();
-        $appSid = $this->_appSid();
-
-        return response()->view(
-            'lead_sources.index',
-            ['leadSources' => $leadSources,
-             'appSid' => $appSid
-            ]
-        );
-    }
-
-    /**
      * Store a new lead source (i.e phone number) and redirect to edit
      * page
      *
@@ -82,7 +63,7 @@ class LeadSourceController extends Controller
         $leadSourceToUpdate->fill($request->all());
         $leadSourceToUpdate->save();
 
-        return redirect()->route('lead_source.index');
+        return redirect()->route('lead.index');
     }
 
     /**

@@ -10,6 +10,38 @@ class LeadControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
+    public function testLeadSourceIndex()
+    {
+        // Given
+
+        $response = $this->call('GET', route('lead.index'));
+        $leadSources = $response->getOriginalContent()['leadSources'];
+
+        $this->assertCount(0, $leadSources);
+
+        $newLeadSource = new LeadSource(
+            ['number' => '+136428733',
+             'description' => 'Some billboard somewhere',
+             'forwarding_number' => '+13947283']
+        );
+        $newLeadSource->save();
+
+        // When
+
+        $newResponse = $this->call('GET', route('lead.index'));
+
+        // Then
+
+        $newLeadSources = $newResponse->getOriginalContent()['leadSources'];
+        $this->assertCount(1, $newLeadSources);
+
+        $this->assertEquals($newLeadSources[0]['number'], '+136428733');
+        $this->assertEquals($newLeadSources[0]['description'], 'Some billboard somewhere');
+        $this->assertEquals($newLeadSources[0]['forwarding_number'], '+13947283');
+
+    }
+    
+
     public function testStore()
     {
         // Given

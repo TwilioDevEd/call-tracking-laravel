@@ -34,15 +34,16 @@ class AvailableNumberControllerTest extends TestCase
         // When
         $response = $this->call('GET', route('available_number.index'));
 
+        $expectedResponse = [
+            "friendly_name" => "(555) 444 444",
+            "region" => "Some region",
+            "phone_number" => "+1555444444"
+        ];
+
         // Then
         $this->assertEquals(
-            $response->getOriginalContent()['numbers'],
-            $mockNumbers
-        );
-
-        $this->assertEquals(
-            $response->getOriginalContent()['areaCode'],
-            null
+            json_decode($response->getContent(), true),
+            [$expectedResponse]
         );
     }
 }
