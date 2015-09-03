@@ -17,10 +17,11 @@ class LeadController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $context = [
             'leadSources' => LeadSource::all(),
+            'availableNumbers' => $this->availableNumbers($request),
             'appSid' => $this->_appSid()
         ];
 
@@ -101,5 +102,20 @@ class LeadController extends Controller
         } else {
             return $matchingApps[0]->sid;
         }
+    }
+
+    private function availableNumbers(Request $request)
+    {
+        $twilio = \App::make('Twilio');
+
+        $areaCode = $request->input('areaCode');
+
+        $numbers = $twilio
+            ->account
+            ->available_phone_numbers
+            ->getList('US', 'Local', ['AreaCode' => $areaCode])
+            ->available_phone_numbers;
+
+        return array_slice($numbers, 0, 5);
     }
 }
