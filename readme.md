@@ -50,9 +50,12 @@ right under "All lead sources". This will take you either to a newly
 create TwiML app under your account or to the application configured
 in the `TWILIO_APP_SID` variable. Edit the application and sets its
 request URL to `http://<your-ngrok-id>/lead` and make sure the method
-is set to POST.
+is set to POST. Click save to finish.
 
 ![App configuration button](images/app-config-button.png)
+
+Configuring the app under your Twilio account:
+
 ![Twilio app configuration](images/app-config.png)
 
 ### Running the tests
