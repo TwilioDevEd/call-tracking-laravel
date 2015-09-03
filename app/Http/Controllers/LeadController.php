@@ -40,8 +40,8 @@ class LeadController extends Controller
         $lead = new Lead();
         $lead->leadSource()->associate($leadSource->id);
 
-        $lead->city = $this->normalizaName($request->input('FromCity'));
-        $lead->state = $this->normalizaName($request->input('FromState'));
+        $lead->city = $this->_normalizeName($request->input('FromCity'));
+        $lead->state = $this->_normalizeName($request->input('FromState'));
 
         $lead->caller_number = $request->input('From');
         $lead->caller_name = $request->input('CallerName');
