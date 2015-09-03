@@ -40,15 +40,8 @@ class LeadController extends Controller
         $lead = new Lead();
         $lead->leadSource()->associate($leadSource->id);
 
-        if (is_null($request->input('FromCity'))) {
-            $lead->city = '';
-        }
-        $lead->city = $request->input('FromCity');
-
-        if (is_null($request->input('FromState'))) {
-            $lead->city = '';
-        }
-        $lead->state = $request->input('FromState');
+        $lead->city = $this->normalizaName($request->input('FromCity'));
+        $lead->state = $this->normalizaName($request->input('FromState'));
 
         $lead->caller_number = $request->input('From');
         $lead->caller_name = $request->input('CallerName');
@@ -125,5 +118,14 @@ class LeadController extends Controller
             ->available_phone_numbers;
 
         return array_slice($numbers, 0, 5);
+    }
+
+    private function _normalizeName($toNormalize)
+    {
+        if (is_null($toNormalize)) {
+            return '';
+        } else {
+            return $toNormalize;
+        }
     }
 }
