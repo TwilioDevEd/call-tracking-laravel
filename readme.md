@@ -7,18 +7,29 @@ the effectiveness of marketing campaigns
 
 ## Running locally
 
+### Installing Postgres
+
+Start a local PostgreSQL database and create a database. If on a
+Mac, I recommend [Postgres.app](http://postgresapp.com/). You will
+need to create a new database the application can use.
+
 ### The web application
 
 1. Clone the repository, copy the included `env.example` as `.env` and
    customize it to your needs. If you already have a
    [TwiML app under your account](https://www.twilio.com/user/account/apps)
    you'd like to use, you will also need to specify its SID.
-2. Use composer to install the app's dependencies by running `composer
+1. Use composer to install the app's dependencies by running `composer
    install` in the repo's root
-3. Run the database migrations using `php artisan migrate`. If the
+1. Run `php artisan key:generate` to generate an `APP_KEY` that
+   Laravel will use for token and cookies.
+1. If you're on OS X you might need to install the PDO drivers for
+   so Eloquent can connect to your database. If you're running PHP 5.6
+   something like `brew install php56-pdo-pgsql` should do it.
+1. Run the database migrations using `php artisan migrate`. If the
    database is configured correctly in `.env` this will get you a
    working database
-4. Go to `http://localhost:8000/dashboard`. If everything is
+1. Go to `http://localhost:8000/dashboard`. If everything is
    configured correctly you should see a dashboard and some numbers
    you can buy through Twilio's API. Buy at least one number and start
    calling the lead sources.
@@ -40,7 +51,7 @@ After this you can expose the application to the wider Internet by
 running (port 8000 is the default for Laravel):
 
 ```
-ngrok 8000
+ngrok http 8000
 ```
 
 ### Configuring the TwiML app to forward calls
