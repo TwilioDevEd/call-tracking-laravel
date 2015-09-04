@@ -24,7 +24,7 @@ database `createdb call_tracking_test` you can run the tests against.
      will attempt to read the configuration from the environment.
    - The values for `TWILIO_ACCOUNT_SID` and `TWILIO_AUTH_TOKEN` can
      be found under your
-     [Twilio account's settings](https://www.twilio.com/user/account/settings)
+     [Twilio account's settings panel](https://www.twilio.com/user/account/settings)
    - If you already have a
      [TwiML app under your account](https://www.twilio.com/user/account/apps)
      you'd like to use, you will also need to specify its SID in this
