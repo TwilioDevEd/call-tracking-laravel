@@ -1,11 +1,7 @@
+@extends('layouts.master')
+
+@section('content')
 <h2>Purchase phone numbers</h2>
-
-{!! Form::open(['url' => route('dashboard'), 'method' => 'GET']) !!}
-    {!! Form::label('areaCode', 'Area code: ') !!}
-    {!! Form::number('areaCode') !!}
-    {!! Form::submit('Search', ['class' => 'btn btn-primary btn-xs']) !!}
-{!! Form::close() !!}
-
     <h3>Available numbers</h3>
     <p>Area code: {{ $areaCode or 'any' }}</p>
     <table class="table">
@@ -29,3 +25,4 @@
             @endforeach
         </tbody>
     </table>
+@stop

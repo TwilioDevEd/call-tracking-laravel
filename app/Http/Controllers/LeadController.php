@@ -21,7 +21,6 @@ class LeadController extends Controller
     {
         $context = [
             'leadSources' => LeadSource::all(),
-            'availableNumbers' => $this->_availableNumbers($request),
             'appSid' => $this->_appSid()
         ];
 
@@ -103,21 +102,6 @@ class LeadController extends Controller
         } else {
             return $matchingApps[0]->sid;
         }
-    }
-
-    private function _availableNumbers(Request $request)
-    {
-        $twilio = \App::make('Twilio');
-
-        $areaCode = $request->input('areaCode');
-
-        $numbers = $twilio
-            ->account
-            ->available_phone_numbers
-            ->getList('US', 'Local', ['AreaCode' => $areaCode])
-            ->available_phone_numbers;
-
-        return array_slice($numbers, 0, 5);
     }
 
     private function _normalizeName($toNormalize)

@@ -27,7 +27,7 @@ class AvailableNumberController extends Controller
             ->getList('US', 'Local', ['AreaCode' => $areaCode])
             ->available_phone_numbers;
 
-        return response()->json(
+        return response()->view(
             'available_numbers.index',
             ['numbers' => $numbers,
              'areaCode' => $areaCode]
