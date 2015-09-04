@@ -1,9 +1,11 @@
 @extends('layouts.master')
 
 @section('content')
+<div class="col-md-6">
 <h2>Purchase phone numbers</h2>
     <h3>Available numbers</h3>
-    <p>Area code: {{ $areaCode or 'any' }}</p>
+    <p>For area code: {{ $areaCode or 'any' }}</p>
+    <p>The number you choose will be used to create a Lead Source. On the next page, you will set a name and forwarding number for this lead source.</p>
     <table class="table">
         <thead>
             <th>Phone number</th>
@@ -18,11 +20,12 @@
                     <td>
                         {!! Form::open(['url' => route('lead_source.store')]) !!}
                         {!! Form::hidden('phoneNumber', $number->phone_number) !!}
-                        {!! Form::submit('Buy', ['class' => 'btn btn-primary btn-sm']) !!}
+                        {!! Form::submit('Purchase', ['class' => 'btn btn-primary btn-xs']) !!}
                         {!! Form::close() !!}
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+</div>
 @stop

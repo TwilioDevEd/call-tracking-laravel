@@ -91,7 +91,7 @@ class LeadSourceController extends Controller
         $twilio->account->incoming_phone_numbers->delete($number->sid);
         $leadSourceToDelete->delete();
 
-        return redirect()->route('lead_source.index');
+        return redirect()->route('dashboard');
     }
 
     /**

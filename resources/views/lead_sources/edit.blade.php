@@ -15,4 +15,9 @@
         </div>
         {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
         {!! Form::close() !!}
+
+    {!! Form::open(['url' => route('lead_source.destroy', $leadSource->id),
+                    'method' => 'DELETE']) !!}
+    {!! Form::submit('Delete this number', ['class' => 'btn btn-danger btn-sm']) !!}
+    {!! Form::close() !!}
 @stop
