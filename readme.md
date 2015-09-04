@@ -18,9 +18,19 @@ database `createdb call_tracking_test` you can run the tests against.
 ### The web application
 
 1. Clone the repository, copy the included `env.example` as `.env` and
-   customize it to your needs. If you already have a
-   [TwiML app under your account](https://www.twilio.com/user/account/apps)
-   you'd like to use, you will also need to specify its SID.
+   customize it to your needs.
+   - This file will be loaded by Laravel which will set the variables
+     configured in it as environment variables. Then the application
+     will attempt to read the configuration from the environment.
+   - The values for `TWILIO_ACCOUNT_SID` and `TWILIO_AUTH_TOKEN` can
+     be found under your
+     [Twilio account's settings](https://www.twilio.com/user/account/settings)
+   - If you already have a
+     [TwiML app under your account](https://www.twilio.com/user/account/apps)
+     you'd like to use, you will also need to specify its SID in this
+     file. If you don't know if you do then you can delete the
+     `TWILIO_APP_SID` line and not worry about it.
+
 1. Use composer to install the app's dependencies by running `composer
    install` in the repo's root
 1. Run `php artisan key:generate` to generate an `APP_KEY` that
