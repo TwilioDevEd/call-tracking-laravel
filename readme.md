@@ -11,7 +11,9 @@ the effectiveness of marketing campaigns
 
 Start a local PostgreSQL database and create a database. If on a
 Mac, I recommend [Postgres.app](http://postgresapp.com/). You will
-need to create a new database the application can use.
+need to create a new database the application can use. Example:
+`createdb call_tracking`. It's also a good idea to create a
+database `createdb call_tracking_test` you can run the tests against.
 
 ### The web application
 
