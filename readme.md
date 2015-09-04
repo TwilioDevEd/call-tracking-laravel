@@ -25,7 +25,7 @@ database `createdb call_tracking_test` you can run the tests against.
    install` in the repo's root
 1. Run `php artisan key:generate` to generate an `APP_KEY` that
    Laravel will use for token and cookies.
-1. If you're on OS X you might need to install the PDO drivers for
+1. If you're on OS X you might need to install the PDO drivers
    so Eloquent can connect to your database. If you're running PHP 5.6
    something like `brew install php56-pdo-pgsql` should do it.
 1. Run the database migrations using `php artisan migrate`. If the
@@ -62,7 +62,7 @@ Go to `http://localhost:8000/dashboard` and click "App Configuration"
 right under "All lead sources". This will take you either to a newly
 create TwiML app under your account or to the application configured
 in the `TWILIO_APP_SID` variable. Edit the application and sets its
-request URL to `http://<your-ngrok-id>/lead` and make sure the method
+request URL to `http://<your-ngrok-id>.ngrok.io/lead` and make sure the method
 is set to POST. Click save to finish.
 
 ![App configuration button](images/app-config-button.png)
