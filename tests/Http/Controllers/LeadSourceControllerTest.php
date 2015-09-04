@@ -8,11 +8,11 @@ use App\LeadSource;
 class LeadSourceControllerTest extends TestCase
 {
     use DatabaseTransactions;
-    use WithoutMiddleware;
 
     public function testStore()
     {
         // Given
+        Session::start();
 
         $mockTwilio = Mockery::mock('Services_Twilio');
         $mockTwilio->account = Mockery::mock();
@@ -34,7 +34,7 @@ class LeadSourceControllerTest extends TestCase
         $response = $this->call(
             'POST', route('lead_source.store'),
             ['phoneNumber' => '+15005550006',
-             '_token' => csrf_token()]
+             '_token' => Session::token()]
         );
 
         $this->assertTrue($response->isRedirect());
@@ -91,11 +91,13 @@ class LeadSourceControllerTest extends TestCase
     public function testDestroy()
     {
         // Given
+        Session::start();
 
         $newLeadSource = new LeadSource(
             ['number' => '+136428733',
              'description' => 'Some billboard somewhere',
-             'forwarding_number' => '+13947283']
+             'forwarding_number' => '+13947283',
+             'token' => csrf_token()]
         );
         $newLeadSource->save();
         $leadSourceId = $newLeadSource->id;
@@ -121,7 +123,11 @@ class LeadSourceControllerTest extends TestCase
 
         // When
 
-        $response = $this->call('DELETE', route('lead_source.destroy', $leadSourceId));
+        $response = $this->call(
+            'DELETE',
+            route('lead_source.destroy', $leadSourceId),
+            ['_token' => csrf_token()]
+        );
 
         // Then
 

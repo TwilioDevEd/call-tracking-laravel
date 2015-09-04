@@ -59,6 +59,13 @@ class LeadSourceController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate(
+            $request, [
+                'forwarding_number' => 'required',
+                'description' => 'required'
+            ]
+        );
+
         $leadSourceToUpdate = LeadSource::find($id);
         $leadSourceToUpdate->fill($request->all());
         $leadSourceToUpdate->save();
