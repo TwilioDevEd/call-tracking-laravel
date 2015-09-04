@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="col-md-6">
+<div class="col-lg-6">
 <h2>Purchase phone numbers</h2>
     <h3>Available numbers</h3>
     <p>For area code: {{ $areaCode or 'any' }}</p>

@@ -6,6 +6,7 @@
         <title>Automated surveys - @yield('title', 'Call tracking')</title>
     </head>
     <body>
+        <div class="container-fluid">
         <nav class="navbar navbar-default">
             <div class="navbar-header">
                 <a class="navbar-brand" href="/">Call tracking</a>
@@ -27,15 +28,10 @@
                 </div>
             @endif
         </div>
-        <div class="container">
-            @yield('content')
-        </div>
-        <footer class="container">
-            Made with <i class="fa fa-heart"></i> by your pals
-            <a href="http://www.twilio.com">@twilio</a>
-        </footer>
+        @yield('content')
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         @yield('scripts')
+        </div>
     </body>
 </html>
