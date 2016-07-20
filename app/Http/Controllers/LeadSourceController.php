@@ -2,33 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\LeadSource;
+use Illuminate\Http\Request;
+use Twilio\Rest\Client;
 
 class LeadSourceController extends Controller
 {
+
+    /**
+     * Twilio Client
+     */
+    protected $_twilioClient;
+
+    public function __construct(Client $twilioClient)
+    {
+        $this->_twilioClient = $twilioClient;
+    }
+
     /**
      * Store a new lead source (i.e phone number) and redirect to edit
      * page
      *
-     * @param  Request  $request
+     * @param  Request $request
      * @return Response
      */
     public function store(Request $request)
     {
-        $twilio = \App::make('Twilio');
         $appSid = $this->_appSid();
 
-        $twilio->account->incoming_phone_numbers->create(
-            ['PhoneNumber' => $request->input('phoneNumber'),
-             'VoiceCallerIdLookup' => true,
-             'VoiceApplicationSid' => $appSid]
-        );
+        $phoneNumber = $request->input('phoneNumber');
 
-        $leadSource = new LeadSource(['number' => $request->input('phoneNumber')]);
+        $this->_twilioClient->incomingPhoneNumbers
+            ->create(
+                [
+                    "phoneNumber" => $phoneNumber,
+                    "voiceApplicationSid" => $appSid,
+                    "voiceCallerIdLookup" => true
+                ]
+            );
+
+        $leadSource = new LeadSource(
+            [
+                'number' => $phoneNumber
+            ]
+        );
         $leadSource->save();
 
         return redirect()->route('lead_source.edit', [$leadSource]);
@@ -37,7 +55,7 @@ class LeadSourceController extends Controller
     /**
      * Show the form for editing a lead source
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function edit($id)
@@ -53,14 +71,15 @@ class LeadSourceController extends Controller
     /**
      * Update the lead source in storage.
      *
-     * @param  Request  $request
-     * @param  int  $id
+     * @param  Request $request
+     * @param  int $id
      * @return Response
      */
     public function update(Request $request, $id)
     {
         $this->validate(
-            $request, [
+            $request,
+            [
                 'forwarding_number' => 'required',
                 'description' => 'required'
             ]
@@ -76,19 +95,22 @@ class LeadSourceController extends Controller
     /**
      * Remove the lead source from storage and release the number
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function destroy($id)
     {
-        $twilio = \App::make('Twilio');
         $leadSourceToDelete = LeadSource::find($id);
-        $number = $twilio
-            ->account
-            ->incoming_phone_numbers
-            ->getNumber($leadSourceToDelete->number);
+        $phoneToDelete = $this->_twilioClient->incomingPhoneNumbers
+            ->read(
+                [
+                    "phoneNumber" => $leadSourceToDelete->number
+                ]
+            );
 
-        $twilio->account->incoming_phone_numbers->delete($number->sid);
+        if ($phoneToDelete) {
+            $phoneToDelete[1]->delete();
+        }
         $leadSourceToDelete->delete();
 
         return redirect()->route('dashboard');
@@ -100,26 +122,28 @@ class LeadSourceController extends Controller
      */
     private function _appSid()
     {
-        $twilio = \App::make('Twilio');
         $appSid = config('app.twilio')['TWILIO_APP_SID'];
-
         if (isset($appSid)) {
             return $appSid;
         }
 
-        $matchingAppsIter = $twilio
-            ->account
-            ->applications
-            ->getIterator(0, 50, ['FriendlyName' => 'Call tracking app']);
+        return $this->_findOrCreateCallTrackingApp();
+    }
 
-        $matchingApps = iterator_to_array($matchingAppsIter);
-
-        if (empty($matchingApps)) {
-            return $twilio->account->applications->create(
-                ['friendly_name' => 'Call tracking app']
-            )->sid;
-        } else {
-            return $matchingApps[0]->sid;
+    private function _findOrCreateCallTrackingApp()
+    {
+        $existingApp = $this->_twilioClient->applications->read(
+            array(
+                "friendlyName" => 'Call tracking app'
+            )
+        );
+        if ($existingApp) {
+            return $existingApp[1]->sid;
         }
+
+        $newApp = $this->_twilioClient->applications
+            ->create('Call tracking app');
+
+        return $newApp->sid;
     }
 }
