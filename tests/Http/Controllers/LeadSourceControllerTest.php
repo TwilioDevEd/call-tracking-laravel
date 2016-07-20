@@ -1,9 +1,12 @@
 <?php
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Support\Facades\App;
 use App\LeadSource;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\App;
+use Twilio\Rest\Api\V2010\Account\ApplicationList;
+use Twilio\Rest\Api\V2010\Account\IncomingPhoneNumberInstance;
+use Twilio\Rest\Api\V2010\Account\IncomingPhoneNumberList;
+use Twilio\Rest\Client;
 
 class LeadSourceControllerTest extends TestCase
 {
@@ -14,38 +17,42 @@ class LeadSourceControllerTest extends TestCase
         // Given
         Session::start();
 
-        $mockTwilio = Mockery::mock('Services_Twilio');
-        $mockTwilio->account = Mockery::mock();
-        $mockTwilio->account->incoming_phone_numbers = Mockery::mock();
+        $mockTwilioClient = Mockery::mock(Client::class);
 
-        $mockTwilio->account->incoming_phone_numbers
+        $mockTwilioClient->incomingPhoneNumbers = Mockery::mock
+        (IncomingPhoneNumberList::class);
+        $mockTwilioClient->incomingPhoneNumbers
             ->shouldReceive('create')
-            ->with(
-                ['PhoneNumber' => '+15005550006',
-                 'VoiceCallerIdLookup' => true,
-                 'VoiceApplicationSid' => env('TWILIO_APP_SID')
-                ]
-            );
+            ->withAnyArgs()
+            ->once();
 
-        App::instance('Twilio', $mockTwilio);
+        $mockApplication = new \stdClass();
+        $mockApplication->sid = "WAXXXXXXXX";
+
+        $mockTwilioClient->applications = Mockery::mock(ApplicationList::class);
+        $mockTwilioClient->applications
+            ->shouldReceive('read')
+            ->withAnyArgs()
+            ->andReturn([1 => $mockApplication]);
+
+        App::instance(Client::class, $mockTwilioClient);
 
         // When
 
-        $response = $this->call(
-            'POST', route('lead_source.store'),
-            ['phoneNumber' => '+15005550006',
-             '_token' => Session::token()]
+        $this->post(
+            route('lead_source.store'),
+            [
+                'phoneNumber' => '+15005550006',
+                '_token' => Session::token()
+            ]
         );
-
-        $this->assertTrue($response->isRedirect());
-
 
         // Then
 
         $allLeadSources = LeadSource::all();
         $firstLeadSource = LeadSource::first();
 
-        $this->assertEquals($response->getTargetUrl(), route('lead_source.edit', $firstLeadSource->id));
+        $this->assertRedirectedToRoute("lead_source.edit", [$firstLeadSource]);
 
         $this->assertCount(1, $allLeadSources);
 
@@ -60,8 +67,8 @@ class LeadSourceControllerTest extends TestCase
 
         $newLeadSource = new LeadSource(
             ['number' => '+136428733',
-             'description' => 'Some billboard somewhere',
-             'forwarding_number' => '+13947283']
+                'description' => 'Some billboard somewhere',
+                'forwarding_number' => '+13947283']
         );
         $newLeadSource->save();
         $leadSourceId = $newLeadSource->id;
@@ -72,7 +79,8 @@ class LeadSourceControllerTest extends TestCase
 
         // Then
 
-        $this->assertEquals($response->getOriginalContent()['leadSource']->id, $newLeadSource->id);
+        $this->assertEquals($response->getOriginalContent()['leadSource']->id,
+            $newLeadSource->id);
 
         $this->assertEquals(
             $response->getOriginalContent()['leadSource']->number,
@@ -93,40 +101,47 @@ class LeadSourceControllerTest extends TestCase
         // Given
         Session::start();
 
+        $this->assertCount(0, LeadSource::all());
+
         $newLeadSource = new LeadSource(
-            ['number' => '+136428733',
-             'description' => 'Some billboard somewhere',
-             'forwarding_number' => '+13947283',
-             'token' => csrf_token()]
+            [
+                'number' => '+136428733',
+                'description' => 'Some billboard somewhere',
+                'forwarding_number' => '+13947283',
+                'token' => csrf_token()
+            ]
         );
         $newLeadSource->save();
-        $leadSourceId = $newLeadSource->id;
+
+        $this->assertCount(1, LeadSource::all());
 
         $mockNumber = Mockery::mock();
         $mockNumber->sid = 'sup3runiq3s1d';
 
-        $mockTwilio = Mockery::mock('Services_Twilio');
-        $mockTwilio->account = Mockery::mock();
-        $mockTwilio->account->incoming_phone_numbers = Mockery::mock();
+        $mockTwilioClient = Mockery::mock(Client::class);
 
-        $mockTwilio->account->incoming_phone_numbers
-            ->shouldReceive('getNumber')
-            ->with($newLeadSource['number'])
-            ->andReturn($mockNumber);
+        $mockPhoneToDelete = Mockery::mock(IncomingPhoneNumberInstance::class);
+        $mockPhoneToDelete->shouldReceive("delete")->once();
 
-        $mockTwilio->account->incoming_phone_numbers
-            ->shouldReceive('delete')
-            ->with('sup3runiq3s1d');
+        $mockTwilioClient->incomingPhoneNumbers = Mockery::mock(
+            IncomingPhoneNumberList::class
+        );
+        $mockTwilioClient->incomingPhoneNumbers
+            ->shouldReceive('read')
+            ->withAnyArgs()
+            ->once()
+            ->andReturn([1 => $mockPhoneToDelete]);
 
-
-        App::instance('Twilio', $mockTwilio);
+        App::instance(Client::class, $mockTwilioClient);
 
         // When
 
         $response = $this->call(
             'DELETE',
-            route('lead_source.destroy', $leadSourceId),
-            ['_token' => csrf_token()]
+            route('lead_source.destroy', [$newLeadSource]),
+            [
+                '_token' => Session::token()
+            ]
         );
 
         // Then
