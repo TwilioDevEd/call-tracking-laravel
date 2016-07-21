@@ -5,6 +5,8 @@ php:
 - 7.0
 addons:
   postgresql: '9.4'
+services:
+- postgresql
 install:
 - pecl install PDO_PGSQL
 - composer install
