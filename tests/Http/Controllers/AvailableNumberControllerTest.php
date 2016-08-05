@@ -1,48 +1,41 @@
 <?php
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\App;
+use Twilio\Rest\Client;
 
 class AvailableNumberControllerTest extends TestCase
 {
+
     public function testIndex()
     {
         // Given
-
-        $mockNumberList = Mockery::mock();
         $mockNumber = Mockery::mock();
 
-        $mockNumber->friendly_name = '(555) 444 444';
+        $mockNumber->friendlyName = '(555) 444 444';
         $mockNumber->region = 'Some region';
-        $mockNumber->phone_number = '+1555444444';
+        $mockNumber->phoneNumber = '+1555444444';
 
         $mockNumbers = [$mockNumber];
 
-        $mockNumberList->available_phone_numbers = $mockNumbers;
+        $mockTwilioClient = Mockery::mock(Client::class);
+        $mockTwilioClient->availablePhoneNumbers = Mockery::mock();
 
-        $mockTwilio = Mockery::mock('Services_Twilio');
-        $mockTwilio->account = Mockery::mock();
-        $mockTwilio->account->available_phone_numbers = Mockery::mock();
-        $mockTwilio->account->available_phone_numbers
-            ->shouldReceive('getList')
-            ->with('US', 'Local', ['AreaCode' => null])
-            ->andReturn($mockNumberList);
+        $mockUsPhones = Mockery::mock();
+        $mockTwilioClient->availablePhoneNumbers
+            ->shouldReceive("getContext")
+            ->withAnyArgs()
+            ->andReturn($mockUsPhones);
 
-        App::instance('Twilio', $mockTwilio);
+        $mockUsPhones->local = Mockery::mock();
+        $mockUsPhones->local
+            ->shouldReceive('stream')
+            ->andReturn($mockNumbers);
 
-        // When
-        $response = $this->call('GET', route('available_number.index'));
+        App::instance(Client::class, $mockTwilioClient);
 
-        // Then
-        $this->assertEquals(
-            $response->getOriginalContent()['numbers'],
-            $mockNumbers
-        );
+        //Then
 
-        $this->assertEquals(
-            $response->getOriginalContent()['areaCode'],
-            null
-        );
+        $this->visit(route('available_number.index'))
+            ->assertViewHas("numbers", $mockNumbers);
     }
 }

@@ -25,7 +25,8 @@ class CreateLead extends Migration
                 $table->integer('lead_source_id');
                 $table->foreign('lead_source_id')
                     ->references('id')
-                    ->on('lead_sources');
+                    ->on('lead_sources')
+                    ->onDelete('cascade');
             }
         );
     }

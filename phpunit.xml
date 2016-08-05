@@ -20,6 +20,10 @@
         </whitelist>
     </filter>
     <php>
+        <env name="TWILIO_ACCOUNT_SID" value="WAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"/>
+        <env name="TWILIO_AUTH_TOKEN" value="WAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"/>
+        <env name="TWILIO_APP_SID" value="WAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"/>
+
         <env name="APP_ENV" value="testing"/>
         <env name="CACHE_DRIVER" value="array"/>
         <env name="SESSION_DRIVER" value="array"/>
