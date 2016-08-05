@@ -109,7 +109,7 @@ class LeadSourceController extends Controller
             );
 
         if ($phoneToDelete) {
-            $phoneToDelete[1]->delete();
+            $phoneToDelete[0]->delete();
         }
         $leadSourceToDelete->delete();
 
@@ -138,7 +138,7 @@ class LeadSourceController extends Controller
             )
         );
         if ($existingApp) {
-            return $existingApp[1]->sid;
+            return $existingApp[0]->sid;
         }
 
         $newApp = $this->_twilioClient->applications
