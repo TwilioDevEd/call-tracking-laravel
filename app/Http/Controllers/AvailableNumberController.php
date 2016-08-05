@@ -18,7 +18,7 @@ class AvailableNumberController extends Controller
     {
         $this->_twilioClient = $twilioClient;
     }
-    
+
     /**
      * Display numbers available for purchase. Fetched from the API
      *
@@ -31,10 +31,10 @@ class AvailableNumberController extends Controller
 
         $numbers = $this->_twilioClient->availablePhoneNumbers->getContext("US")
             ->local->stream(
-            [
-                'areaCode' => $areaCode
-            ]
-        );
+                [
+                    'areaCode' => $areaCode
+                ]
+            );
 
         return response()->view(
             'available_numbers.index',

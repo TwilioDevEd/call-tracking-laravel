@@ -19,8 +19,9 @@ class LeadSourceControllerTest extends TestCase
 
         $mockTwilioClient = Mockery::mock(Client::class);
 
-        $mockTwilioClient->incomingPhoneNumbers = Mockery::mock
-        (IncomingPhoneNumberList::class);
+        $mockTwilioClient->incomingPhoneNumbers
+            = Mockery::mock(IncomingPhoneNumberList::class);
+
         $mockTwilioClient->incomingPhoneNumbers
             ->shouldReceive('create')
             ->withAnyArgs()
@@ -33,7 +34,7 @@ class LeadSourceControllerTest extends TestCase
         $mockTwilioClient->applications
             ->shouldReceive('read')
             ->withAnyArgs()
-            ->andReturn([1 => $mockApplication]);
+            ->andReturn([0 => $mockApplication]);
 
         App::instance(Client::class, $mockTwilioClient);
 
@@ -107,8 +108,7 @@ class LeadSourceControllerTest extends TestCase
             [
                 'number' => '+136428733',
                 'description' => 'Some billboard somewhere',
-                'forwarding_number' => '+13947283',
-                'token' => csrf_token()
+                'forwarding_number' => '+13947283'
             ]
         );
         $newLeadSource->save();
@@ -130,7 +130,7 @@ class LeadSourceControllerTest extends TestCase
             ->shouldReceive('read')
             ->withAnyArgs()
             ->once()
-            ->andReturn([1 => $mockPhoneToDelete]);
+            ->andReturn([0 => $mockPhoneToDelete]);
 
         App::instance(Client::class, $mockTwilioClient);
 

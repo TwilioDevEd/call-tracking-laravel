@@ -112,7 +112,7 @@ class LeadController extends Controller
             )
         );
         if ($existingApp) {
-            return $existingApp[1]->sid();
+            return $existingApp[0]->sid();
         }
 
         $newApp = $this->_twilioClient->applications
