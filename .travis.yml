@@ -4,13 +4,14 @@ php:
 addons:
   postgresql: '9.4'
 install:
-- pecl install PDO_PGSQL
 - composer install
 env:
   global:
   - APP_ENV=testing
   - DB_CONNECTION=pgsql
   - DATABASE_URL=postgres://postgres:@localhost:5432/call_tracking_test
+  - TWILIO_ACCOUNT_SID=ACXXXXXXXXXXXXX
+  - TWILIO_AUTH_TOKEN=your_auth_token
   - TWILIO_APP_SID=somefak3apps1d
   - APP_KEY=M0HYKpEoPSPnl7V4Ck6notarealkeyUx
 before_script:

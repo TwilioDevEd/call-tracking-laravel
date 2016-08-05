@@ -1,0 +1,171 @@
+<!DOCTYPE html><html><head><title>Call Tracking</title><style>body, html {
+  height:100%;
+  width:100%;
+  padding:0;
+  margin:0;
+  overflow:hidden;
+  background-color:#ddd;
+}
+.wrapper {
+  height:100%;
+  width:100%;
+}</style><link rel="shortcut icon" href="//twilio.com/bundles/marketing/img/favicons/favicon.ico"><link rel="apple-touch-icon" href="//twilio.com/bundles/marketing/img/favicons/favicon_57.png"><link rel="apple-touch-icon" sizes="72x72" href="//twilio.com/bundles/marketing/img/favicons/favicon_72.png"><link rel="apple-touch-icon" sizes="114x114" href="//twilio.com/bundles/marketing/img/favicons/favicon_114.png"><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"><link rel="stylesheet" href="viewsaurus.css"></head><body><div class="wrapper"><div id="viewsaurus" data-title="Call Tracking"><div class="saurus-panes"><div class="saurus-prose"><div class="saurus-prose-header"><div class="title-outer"><span class="step-title">Call Tracking</span></div></div><div class="saurus-nav-buttons"><div class="saurus-nav-button nav-overview"><div class="saurus-nav-button-inner"><i class="fa fa-fw fa-list"></i></div><div class="nav-divider"></div></div><div class="saurus-nav-button nav-previous"><div class="saurus-nav-button-inner"><a href=""> <i class="fa fa-fw fa-play fa-rotate-180"></i></a></div><div class="nav-divider"></div></div><div class="saurus-nav-button nav-next clickable"><div class="saurus-nav-button-inner"><a href="#1"> <i class="fa fa-fw fa-play"></i></a></div></div><div class="saurus-next-title"><span class="next-title-inner"></span></div></div><div class="saurus-progress-bar"></div><div class="saurus-start"><p>Use Twilio to track the effectiveness of your marketing campaigns. Let's get started!</p><a href="#0">Start Tutorial</a></div><div class="saurus-content"><div data-title="Call Tracking with Twilio and Laravel" class="chapter"><div data-file="app/Providers/TwilioAppServiceProvider.php" class="step"><h2 id="what-does-this-thing-do-">What does this thing do?</h2>
+<p>This <a href="http://laravel.com/">Laravel</a> web application shows
+how you can use Twilio to track the effectiveness of different
+marketing channels.</p>
+<p>This application has three main features:</p>
+<ul>
+<li>It purchases phone numbers from Twilio to use in different marketing
+campaigns (like a billboard or a bus advertisement)</li>
+<li>It forwards incoming calls for those phone numbers to a salesperson</li>
+<li>It displays charts showing data about the phone numbers and the calls
+they receive</li>
+</ul>
+<p>In this tutorial, we&#39;ll point out the key bits of code that make
+this application work.  <a href="https://github.com/twiliodeved/call-tracking-laravel">Check out the project README on
+GitHub</a> to
+see how to run the code yourself.</p>
+<p>Let&#39;s get started! Click the right arrow above to advance to the next
+code snippet.</p>
+<hr>
+<p><strong>See also:</strong></p>
+<ul>
+<li><a href="https://github.com/twilio/twilio-php/">Twilio PHP Helper Library</a></li>
+<li><a href="https://www.twilio.com/docs/api">Twilio REST API docs</a></li>
+<li><a href="http://laravel.com/docs/5.1">Laravel documentation</a></li>
+<li><a href="http://www.searchenginejournal.com/seo-beginner-guide-call-tracking-care/83173/">What is Call Tracking?</a></li>
+</ul>
+</div><div data-file="app/Http/Controllers/AvailableNumberController.php" data-highlight="9-47" class="step"><h2 id="search-for-available-phone-numbers">Search for available phone numbers</h2>
+<p>Call tracking requires us to search for and buy phone numbers on
+demand, associating a specific phone number with a lead
+source. We make a server-side request (possibly with a filter
+area code) asking Twilio for available phone numbers.</p>
+<hr>
+<p><strong>See also:</strong></p>
+<ul>
+<li><a href="https://twilio-php.readthedocs.org/en/latest">twilio-php helper</a></li>
+<li><a href="https://twilio-php.readthedocs.org/en/latest/usage/rest/phonenumbers.html#searching-for-a-number">Searching for numbers in twilio-php</a></li>
+<li><a href="https://twilio-php.readthedocs.org/en/latest/usage/rest/phonenumbers.html#buying-a-number">Buying numbers in twilio-php</a></li>
+<li><a href="https://www.twilio.com/docs/api/rest/available-phone-numbers">REST API: Available Phone Numbers</a></li>
+</ul>
+</div><div data-file="resources/views/available_numbers/index.blade.php" class="step"><h2 id="display-available-phone-numbers">Display available phone numbers</h2>
+<p>When the user searches for a phone number to use for call tracking, we 
+display a list of phone numbers that are available for purchase through
+the Twilio API. For each number, we create a form that, when submitted,
+will purchase that number through the Twilio API.</p>
+<hr>
+<p><strong>See also:</strong></p>
+<ul>
+<li><a href="http://laravel.com/docs/5.1/blade">The Blade templating engine</a></li>
+<li><a href="http://laravelcollective.com/docs/5.1/html">Laravel Collective: Forms &amp; Html</a></li>
+</ul>
+</div><div data-file="app/Http/Controllers/LeadSourceController.php" data-highlight="23-53" class="step"><h2 id="buy-a-phone-number">Buy a phone number</h2>
+<p>Once the user has selected a phone number to purchase, we complete the
+transaction using the Twilio API. When we buy the number, we specify that
+it should look up caller ID info on every call, and that it should use 
+<a href="https://www.twilio.com/help/faq/twilio-client/how-do-i-create-a-twiml-app">a TwiML Application we created</a> to handle incoming calls.</p>
+<p>When a phone number is purchased, we associate it with a <code>LeadSource</code> model,
+which the user can edit after a redirect.</p>
+<hr>
+<p><strong>See also:</strong></p>
+<ul>
+<li><a href="https://twilio-php.readthedocs.org/en/latest/usage/rest/phonenumbers.html#buying-a-number">Buying numbers in twilio-php</a></li>
+<li><a href="https://www.twilio.com/docs/api/rest/available-phone-numbers">Twilio REST API: Available Phone Numbers</a></li>
+</ul>
+</div><div data-file="app/Http/Controllers/LeadSourceController.php" data-highlight="55-69" class="step"><h2 id="associate-a-phone-number-with-a-lead-source">Associate a phone number with a lead source</h2>
+<p>Once we have bought a number, we display a form so the user can
+add a forwarding number and a description for this number. From
+now on, any call to this number will be attributed to this
+source. All phone numbers should be in E.164 format.</p>
+<hr>
+<p><strong>See also:</strong></p>
+<ul>
+<li><a href="http://laravelcollective.com/docs/5.1/html#opening-a-form">Laravel Collective Forms</a></li>
+<li><a href="http://laravel.com/docs/5.1/responses#redirects">Laravel redirects</a></li>
+<li><a href="https://en.wikipedia.org/wiki/E.164">E.164 format</a></li>
+</ul>
+</div><div data-file="app/LeadSource.php" class="step"><h2 id="the-leadsource-model">The LeadSource model</h2>
+<p>This is the model that contains the information provided in the
+form from the previous step. The <code>LeadSource</code> model associates a
+Twilio number to a named lead source (like &quot;Wall Street Journal
+Ad&quot; or &quot;Dancing guy with sign&quot;). It also tracks a phone number
+to which we&#39;d like all the calls redirected, like your sales or
+support help line.  It also provides a convenience method to
+find leads associated with this lead source.</p>
+<hr>
+<p><strong>See also:</strong></p>
+<ul>
+<li><a href="http://laravel.com/docs/5.1/eloquent">Eloquent models</a></li>
+<li><a href="http://laravel.com/api/5.1/Illuminate/Database/Eloquent/Model.html#method_hasMany">Eloquent hasMany</a></li>
+</ul>
+</div><div data-file="app/Lead.php" data-highlight="9-51" class="step"><h2 id="the-lead-model">The Lead model</h2>
+<p>A <code>Lead</code> represents a phone call generated by a
+<code>LeadSource</code>. Each time somebody calls a phone number associated
+with a <code>LeadSource</code>, we&#39;ll use the <code>Lead</code> model to record some
+of the <a href="https://www.twilio.com/docs/api/twiml/twilio_request">data Twilio gives
+us</a> about
+their call.</p>
+<hr>
+<p><strong>See also:</strong></p>
+<ul>
+<li><a href="http://laravel.com/api/5.1/Illuminate/Database/Eloquent/Model.html#method_belongsTo">Eloquent belongsTo</a></li>
+</ul>
+</div><div data-file="app/Http/Controllers/LeadController.php" data-highlight="41-68" class="step"><h2 id="forward-calls-and-create-leads">Forward calls and create leads</h2>
+<p>Whenever a customer calls one of our Twilio numbers, Twilio will
+send a POST request to the URL associated with this view
+function (should be <code>/lead</code>).</p>
+<p>We use the incoming call data to create a new <code>Lead</code> for a
+<code>LeadSource</code>, then return
+<a href="https://www.twilio.com/docs/api/twiml">TwiML</a> that connects our
+caller with the <code>forwarding_number</code> of our <code>LeadSource</code>.</p>
+<hr>
+<p><strong>See also:</strong></p>
+<ul>
+<li><a href="https://www.twilio.com/docs/api/twiml/twilio_request">Twilio voice request parameters</a></li>
+<li><a href="http://laravel.com/docs/5.1/routing#csrf-excluding-uris">Excluding URIs from CSRF protection</a></li>
+<li><a href="https://twilio-php.readthedocs.org/en/latest/usage/twiml.html">TwiML creation with twilio-php</a></li>
+<li><a href="https://www.twilio.com/docs/api/twiml/dial">TwiML &lt;Dial&gt; verb</a></li>
+</ul>
+</div><div data-file="app/Lead.php" data-highlight="18-50" class="step"><h2 id="get-statistics-about-our-lead-sources">Get statistics about our lead sources</h2>
+<p>One useful statistic we can get from our data is how many calls
+each <code>LeadSource</code> has received. We might also want to know the
+cities the leads are coming from. For this we define two Eloquent queries
+that return these bits of data.</p>
+<hr>
+<p><strong>See also:</strong></p>
+<ul>
+<li><a href="http://laravel.com/docs/5.1/eloquent-relationships#querying-relations">Eloquent: Querying Relations</a></li>
+</ul>
+</div><div data-file="public/js/pieCharts.js" class="step"><h2 id="visualize-our-statistics-with-chart-js">Visualize our statistics with Chart.js</h2>
+<p>Back on the home page, we fetch call tracking statistics <a href="http://laravel.com/docs/5.1/responses#json-responses">in
+JSON from the
+server</a>
+using <a href="https://api.jquery.com/jquery.get/">jQuery</a>.  We display
+the stats in colorful pie charts we create with
+<a href="http://www.chartjs.org/">Chart.js</a>.</p>
+</div><div class="step"><h2 id="where-to-next-">Where to next?</h2>
+<p>That&#39;s it! Our Laravel application is now ready to purchase new phone
+numbers, forward incoming calls, and record some statistics for our
+business. </p>
+<p>If you&#39;re a PHP developer working with Twilio, you might also enjoy these
+tutorials:</p>
+<p><a href="https://www.twilio.com/docs/howto/walkthrough/click-to-call/php/laravel"><strong>Click-To-Call (Laravel)</strong></a></p>
+<p>Put a button on your web page that connects visitors to live support or sales people via telephone.</p>
+<p><a href="https://www.twilio.com/docs/howto/walkthrough/appointment-reminders/php/laravel"><strong>Appointment Reminders (Laravel)</strong></a></p>
+<p>Send your customers automatic reminders ahead of appoiments using Twilio
+SMS.</p>
+<p>Thanks for checking out this tutorial! If you have any feedback to
+share with us, we&#39;d love to hear it.
+<a href="mailto:deved-oss@twilio.com">Contact the Twilio Developer Education Team</a>
+to let us know what you think.</p>
+</div></div>
+<div class="saurus-files" style="display:none;"><textarea class="saurus-file" data-file="app/Providers/TwilioAppServiceProvider.php" data-mode="php">PD9waHAKCm5hbWVzcGFjZSBBcHBcUHJvdmlkZXJzOwoKdXNlIElsbHVtaW5hdGVcU3VwcG9ydFxTZXJ2aWNlUHJvdmlkZXI7CnVzZSBUd2lsaW9cUmVzdFxDbGllbnQ7CgpjbGFzcyBUd2lsaW9BcHBTZXJ2aWNlUHJvdmlkZXIgZXh0ZW5kcyBTZXJ2aWNlUHJvdmlkZXIKewogICAgLyoqCiAgICAgKiBJbml0aWFsaXplcyBhbmQgcmVnaXN0ZXJzIFR3aWxpbyBTREsncyBvYmplY3QuCiAgICAgKgogICAgICogQHJldHVybiB2b2lkCiAgICAgKi8KICAgIHB1YmxpYyBmdW5jdGlvbiByZWdpc3RlcigpCiAgICB7CgogICAgICAgICRhY2NvdW50U2lkID0gY29uZmlnKCdhcHAudHdpbGlvJylbJ1RXSUxJT19BQ0NPVU5UX1NJRCddCiAgICAgICAgb3IgZGllKCJUV0lMSU9fQUNDT1VOVF9TSUQgaXMgbm90IHNldCBpbiB0aGUgZW52aXJvbm1lbnQiKTsKICAgICAgICAkYXV0aFRva2VuID0gY29uZmlnKCdhcHAudHdpbGlvJylbJ1RXSUxJT19BVVRIX1RPS0VOJ10KICAgICAgICBvciBkaWUoIlRXSUxJT19BVVRIX1RPS0VOIGlzIG5vdCBzZXQgaW4gdGhlIGVudmlyb25tZW50Iik7CgogICAgICAgICR0d2lsaW9DbGllbnQgPSBuZXcgQ2xpZW50KCRhY2NvdW50U2lkLCAkYXV0aFRva2VuKTsKCiAgICAgICAgJHRoaXMtPmFwcC0+aW5zdGFuY2UoQ2xpZW50OjpjbGFzcywgJHR3aWxpb0NsaWVudCk7CiAgICB9CgogICAgLyoqCiAgICAgKiBHZXQgdGhlIHNlcnZpY2VzIHByb3ZpZGVkIGJ5IHRoZSBwcm92aWRlci4KICAgICAqCiAgICAgKiBAcmV0dXJuIGFycmF5CiAgICAgKi8KICAgIHB1YmxpYyBmdW5jdGlvbiBwcm92aWRlcygpCiAgICB7CiAgICAgICAgcmV0dXJuIFtDbGllbnQ6OmNsYXNzXTsKICAgIH0KfQo=</textarea>
+<textarea class="saurus-file" data-file="app/Http/Controllers/AvailableNumberController.php" data-mode="php">PD9waHAKCm5hbWVzcGFjZSBBcHBcSHR0cFxDb250cm9sbGVyczsKCnVzZSBBcHBcSHR0cFxSZXF1ZXN0czsKdXNlIElsbHVtaW5hdGVcSHR0cFxSZXF1ZXN0Owp1c2UgVHdpbGlvXFJlc3RcQ2xpZW50OwoKY2xhc3MgQXZhaWxhYmxlTnVtYmVyQ29udHJvbGxlciBleHRlbmRzIENvbnRyb2xsZXIKewoKICAgIC8qKgogICAgICogVHdpbGlvIENsaWVudAogICAgICovCiAgICBwcm90ZWN0ZWQgJF90d2lsaW9DbGllbnQ7CgogICAgcHVibGljIGZ1bmN0aW9uIF9fY29uc3RydWN0KENsaWVudCAkdHdpbGlvQ2xpZW50KQogICAgewogICAgICAgICR0aGlzLT5fdHdpbGlvQ2xpZW50ID0gJHR3aWxpb0NsaWVudDsKICAgIH0KCiAgICAvKioKICAgICAqIERpc3BsYXkgbnVtYmVycyBhdmFpbGFibGUgZm9yIHB1cmNoYXNlLiBGZXRjaGVkIGZyb20gdGhlIEFQSQogICAgICoKICAgICAqIEBwYXJhbSAgUmVxdWVzdCAkcmVxdWVzdAogICAgICogQHJldHVybiBSZXNwb25zZQogICAgICovCiAgICBwdWJsaWMgZnVuY3Rpb24gaW5kZXgoUmVxdWVzdCAkcmVxdWVzdCkKICAgIHsKICAgICAgICAkYXJlYUNvZGUgPSAkcmVxdWVzdC0+aW5wdXQoJ2FyZWFDb2RlJyk7CgogICAgICAgICRudW1iZXJzID0gJHRoaXMtPl90d2lsaW9DbGllbnQtPmF2YWlsYWJsZVBob25lTnVtYmVycy0+Z2V0Q29udGV4dCgiVVMiKQogICAgICAgICAgICAtPmxvY2FsLT5zdHJlYW0oCiAgICAgICAgICAgICAgICBbCiAgICAgICAgICAgICAgICAgICAgJ2FyZWFDb2RlJyA9PiAkYXJlYUNvZGUKICAgICAgICAgICAgICAgIF0KICAgICAgICAgICAgKTsKCiAgICAgICAgcmV0dXJuIHJlc3BvbnNlKCktPnZpZXcoCiAgICAgICAgICAgICdhdmFpbGFibGVfbnVtYmVycy5pbmRleCcsCiAgICAgICAgICAgIFsKICAgICAgICAgICAgICAgICdudW1iZXJzJyA9PiAkbnVtYmVycywKICAgICAgICAgICAgICAgICdhcmVhQ29kZScgPT4gJGFyZWFDb2RlCiAgICAgICAgICAgIF0KICAgICAgICApOwogICAgfQp9Cg==</textarea>
+<textarea class="saurus-file" data-file="resources/views/available_numbers/index.blade.php" data-mode="php">QGV4dGVuZHMoJ2xheW91dHMubWFzdGVyJykKCkBzZWN0aW9uKCdjb250ZW50JykKPGRpdiBjbGFzcz0iY29sLWxnLTYiPgo8aDI+UHVyY2hhc2UgcGhvbmUgbnVtYmVyczwvaDI+CiAgICA8aDM+QXZhaWxhYmxlIG51bWJlcnM8L2gzPgogICAgPHA+Rm9yIGFyZWEgY29kZToge3sgJGFyZWFDb2RlIG9yICdhbnknIH19PC9wPgogICAgPHA+VGhlIG51bWJlciB5b3UgY2hvb3NlIHdpbGwgYmUgdXNlZCB0byBjcmVhdGUgYSBMZWFkIFNvdXJjZS4gT24gdGhlIG5leHQgcGFnZSwgeW91IHdpbGwgc2V0IGEgbmFtZSBhbmQgZm9yd2FyZGluZyBudW1iZXIgZm9yIHRoaXMgbGVhZCBzb3VyY2UuPC9wPgogICAgPHRhYmxlIGNsYXNzPSJ0YWJsZSI+CiAgICAgICAgPHRoZWFkPgogICAgICAgICAgICA8dGg+UGhvbmUgbnVtYmVyPC90aD4KICAgICAgICAgICAgPHRoPlN0YXRlPC90aD4KICAgICAgICAgICAgPHRoPjwvdGg+CiAgICAgICAgPC90aGVhZD4KICAgICAgICA8dGJvZHk+CiAgICAgICAgICAgIEBmb3JlYWNoICgkbnVtYmVycyBhcyAkbnVtYmVyKQogICAgICAgICAgICAgICAgPHRyPgogICAgICAgICAgICAgICAgICAgIDx0ZD4ge3sgJG51bWJlci0+ZnJpZW5kbHlOYW1lIH19IDwvdGQ+CiAgICAgICAgICAgICAgICAgICAgPHRkPiB7eyAkbnVtYmVyLT5yZWdpb24gfX0gPC90ZD4KICAgICAgICAgICAgICAgICAgICA8dGQ+CiAgICAgICAgICAgICAgICAgICAgICAgIHshISBGb3JtOjpvcGVuKFsndXJsJyA9PiByb3V0ZSgnbGVhZF9zb3VyY2Uuc3RvcmUnKV0pICEhfQogICAgICAgICAgICAgICAgICAgICAgICB7ISEgRm9ybTo6aGlkZGVuKCdwaG9uZU51bWJlcicsICRudW1iZXItPnBob25lTnVtYmVyKSAhIX0KICAgICAgICAgICAgICAgICAgICAgICAgeyEhIEZvcm06OnN1Ym1pdCgnUHVyY2hhc2UnLCBbJ2NsYXNzJyA9PiAnYnRuIGJ0bi1wcmltYXJ5IGJ0bi14cyddKSAhIX0KICAgICAgICAgICAgICAgICAgICAgICAgeyEhIEZvcm06OmNsb3NlKCkgISF9CiAgICAgICAgICAgICAgICAgICAgPC90ZD4KICAgICAgICAgICAgICAgIDwvdHI+CiAgICAgICAgICAgIEBlbmRmb3JlYWNoCiAgICAgICAgPC90Ym9keT4KICAgIDwvdGFibGU+CjwvZGl2PgpAc3RvcAo=</textarea>
+<textarea class="saurus-file" data-file="app/Http/Controllers/LeadSourceController.php" data-mode="php">PD9waHAKCm5hbWVzcGFjZSBBcHBcSHR0cFxDb250cm9sbGVyczsKCnVzZSBBcHBcSHR0cFxSZXF1ZXN0czsKdXNlIEFwcFxMZWFkU291cmNlOwp1c2UgSWxsdW1pbmF0ZVxIdHRwXFJlcXVlc3Q7CnVzZSBUd2lsaW9cUmVzdFxDbGllbnQ7CgpjbGFzcyBMZWFkU291cmNlQ29udHJvbGxlciBleHRlbmRzIENvbnRyb2xsZXIKewoKICAgIC8qKgogICAgICogVHdpbGlvIENsaWVudAogICAgICovCiAgICBwcm90ZWN0ZWQgJF90d2lsaW9DbGllbnQ7CgogICAgcHVibGljIGZ1bmN0aW9uIF9fY29uc3RydWN0KENsaWVudCAkdHdpbGlvQ2xpZW50KQogICAgewogICAgICAgICR0aGlzLT5fdHdpbGlvQ2xpZW50ID0gJHR3aWxpb0NsaWVudDsKICAgIH0KCiAgICAvKioKICAgICAqIFN0b3JlIGEgbmV3IGxlYWQgc291cmNlIChpLmUgcGhvbmUgbnVtYmVyKSBhbmQgcmVkaXJlY3QgdG8gZWRpdAogICAgICogcGFnZQogICAgICoKICAgICAqIEBwYXJhbSAgUmVxdWVzdCAkcmVxdWVzdAogICAgICogQHJldHVybiBSZXNwb25zZQogICAgICovCiAgICBwdWJsaWMgZnVuY3Rpb24gc3RvcmUoUmVxdWVzdCAkcmVxdWVzdCkKICAgIHsKICAgICAgICAkYXBwU2lkID0gJHRoaXMtPl9hcHBTaWQoKTsKCiAgICAgICAgJHBob25lTnVtYmVyID0gJHJlcXVlc3QtPmlucHV0KCdwaG9uZU51bWJlcicpOwoKICAgICAgICAkdGhpcy0+X3R3aWxpb0NsaWVudC0+aW5jb21pbmdQaG9uZU51bWJlcnMKICAgICAgICAgICAgLT5jcmVhdGUoCiAgICAgICAgICAgICAgICBbCiAgICAgICAgICAgICAgICAgICAgInBob25lTnVtYmVyIiA9PiAkcGhvbmVOdW1iZXIsCiAgICAgICAgICAgICAgICAgICAgInZvaWNlQXBwbGljYXRpb25TaWQiID0+ICRhcHBTaWQsCiAgICAgICAgICAgICAgICAgICAgInZvaWNlQ2FsbGVySWRMb29rdXAiID0+IHRydWUKICAgICAgICAgICAgICAgIF0KICAgICAgICAgICAgKTsKCiAgICAgICAgJGxlYWRTb3VyY2UgPSBuZXcgTGVhZFNvdXJjZSgKICAgICAgICAgICAgWwogICAgICAgICAgICAgICAgJ251bWJlcicgPT4gJHBob25lTnVtYmVyCiAgICAgICAgICAgIF0KICAgICAgICApOwogICAgICAgICRsZWFkU291cmNlLT5zYXZlKCk7CgogICAgICAgIHJldHVybiByZWRpcmVjdCgpLT5yb3V0ZSgnbGVhZF9zb3VyY2UuZWRpdCcsIFskbGVhZFNvdXJjZV0pOwogICAgfQoKICAgIC8qKgogICAgICogU2hvdyB0aGUgZm9ybSBmb3IgZWRpdGluZyBhIGxlYWQgc291cmNlCiAgICAgKgogICAgICogQHBhcmFtICBpbnQgJGlkCiAgICAgKiBAcmV0dXJuIFJlc3BvbnNlCiAgICAgKi8KICAgIHB1YmxpYyBmdW5jdGlvbiBlZGl0KCRpZCkKICAgIHsKICAgICAgICAkbGVhZFNvdXJjZVRvRWRpdCA9IExlYWRTb3VyY2U6OmZpbmQoJGlkKTsKCiAgICAgICAgcmV0dXJuIHJlc3BvbnNlKCktPnZpZXcoCiAgICAgICAgICAgICdsZWFkX3NvdXJjZXMuZWRpdCcsCiAgICAgICAgICAgIFsnbGVhZFNvdXJjZScgPT4gJGxlYWRTb3VyY2VUb0VkaXRdCiAgICAgICAgKTsKICAgIH0KCiAgICAvKioKICAgICAqIFVwZGF0ZSB0aGUgbGVhZCBzb3VyY2UgaW4gc3RvcmFnZS4KICAgICAqCiAgICAgKiBAcGFyYW0gIFJlcXVlc3QgJHJlcXVlc3QKICAgICAqIEBwYXJhbSAgaW50ICRpZAogICAgICogQHJldHVybiBSZXNwb25zZQogICAgICovCiAgICBwdWJsaWMgZnVuY3Rpb24gdXBkYXRlKFJlcXVlc3QgJHJlcXVlc3QsICRpZCkKICAgIHsKICAgICAgICAkdGhpcy0+dmFsaWRhdGUoCiAgICAgICAgICAgICRyZXF1ZXN0LAogICAgICAgICAgICBbCiAgICAgICAgICAgICAgICAnZm9yd2FyZGluZ19udW1iZXInID0+ICdyZXF1aXJlZCcsCiAgICAgICAgICAgICAgICAnZGVzY3JpcHRpb24nID0+ICdyZXF1aXJlZCcKICAgICAgICAgICAgXQogICAgICAgICk7CgogICAgICAgICRsZWFkU291cmNlVG9VcGRhdGUgPSBMZWFkU291cmNlOjpmaW5kKCRpZCk7CiAgICAgICAgJGxlYWRTb3VyY2VUb1VwZGF0ZS0+ZmlsbCgkcmVxdWVzdC0+YWxsKCkpOwogICAgICAgICRsZWFkU291cmNlVG9VcGRhdGUtPnNhdmUoKTsKCiAgICAgICAgcmV0dXJuIHJlZGlyZWN0KCktPnJvdXRlKCdkYXNoYm9hcmQnKTsKICAgIH0KCiAgICAvKioKICAgICAqIFJlbW92ZSB0aGUgbGVhZCBzb3VyY2UgZnJvbSBzdG9yYWdlIGFuZCByZWxlYXNlIHRoZSBudW1iZXIKICAgICAqCiAgICAgKiBAcGFyYW0gIGludCAkaWQKICAgICAqIEByZXR1cm4gUmVzcG9uc2UKICAgICAqLwogICAgcHVibGljIGZ1bmN0aW9uIGRlc3Ryb3koJGlkKQogICAgewogICAgICAgICRsZWFkU291cmNlVG9EZWxldGUgPSBMZWFkU291cmNlOjpmaW5kKCRpZCk7CiAgICAgICAgJHBob25lVG9EZWxldGUgPSAkdGhpcy0+X3R3aWxpb0NsaWVudC0+aW5jb21pbmdQaG9uZU51bWJlcnMKICAgICAgICAgICAgLT5yZWFkKAogICAgICAgICAgICAgICAgWwogICAgICAgICAgICAgICAgICAgICJwaG9uZU51bWJlciIgPT4gJGxlYWRTb3VyY2VUb0RlbGV0ZS0+bnVtYmVyCiAgICAgICAgICAgICAgICBdCiAgICAgICAgICAgICk7CgogICAgICAgIGlmICgkcGhvbmVUb0RlbGV0ZSkgewogICAgICAgICAgICAkcGhvbmVUb0RlbGV0ZVswXS0+ZGVsZXRlKCk7CiAgICAgICAgfQogICAgICAgICRsZWFkU291cmNlVG9EZWxldGUtPmRlbGV0ZSgpOwoKICAgICAgICByZXR1cm4gcmVkaXJlY3QoKS0+cm91dGUoJ2Rhc2hib2FyZCcpOwogICAgfQoKICAgIC8qKgogICAgICogVGhlIFR3aWxpbyBUd2lNTCBBcHAgU0lEIHRvIHVzZQogICAgICogQHJldHVybiBzdHJpbmcKICAgICAqLwogICAgcHJpdmF0ZSBmdW5jdGlvbiBfYXBwU2lkKCkKICAgIHsKICAgICAgICAkYXBwU2lkID0gY29uZmlnKCdhcHAudHdpbGlvJylbJ1RXSUxJT19BUFBfU0lEJ107CiAgICAgICAgaWYgKGlzc2V0KCRhcHBTaWQpKSB7CiAgICAgICAgICAgIHJldHVybiAkYXBwU2lkOwogICAgICAgIH0KCiAgICAgICAgcmV0dXJuICR0aGlzLT5fZmluZE9yQ3JlYXRlQ2FsbFRyYWNraW5nQXBwKCk7CiAgICB9CgogICAgcHJpdmF0ZSBmdW5jdGlvbiBfZmluZE9yQ3JlYXRlQ2FsbFRyYWNraW5nQXBwKCkKICAgIHsKICAgICAgICAkZXhpc3RpbmdBcHAgPSAkdGhpcy0+X3R3aWxpb0NsaWVudC0+YXBwbGljYXRpb25zLT5yZWFkKAogICAgICAgICAgICBhcnJheSgKICAgICAgICAgICAgICAgICJmcmllbmRseU5hbWUiID0+ICdDYWxsIHRyYWNraW5nIGFwcCcKICAgICAgICAgICAgKQogICAgICAgICk7CiAgICAgICAgaWYgKCRleGlzdGluZ0FwcCkgewogICAgICAgICAgICByZXR1cm4gJGV4aXN0aW5nQXBwWzBdLT5zaWQ7CiAgICAgICAgfQoKICAgICAgICAkbmV3QXBwID0gJHRoaXMtPl90d2lsaW9DbGllbnQtPmFwcGxpY2F0aW9ucwogICAgICAgICAgICAtPmNyZWF0ZSgnQ2FsbCB0cmFja2luZyBhcHAnKTsKCiAgICAgICAgcmV0dXJuICRuZXdBcHAtPnNpZDsKICAgIH0KfQo=</textarea>
+<textarea class="saurus-file" data-file="app/LeadSource.php" data-mode="php">PD9waHAKCm5hbWVzcGFjZSBBcHA7Cgp1c2UgSWxsdW1pbmF0ZVxEYXRhYmFzZVxFbG9xdWVudFxNb2RlbDsKdXNlIEFwcFxMZWFkOwoKY2xhc3MgTGVhZFNvdXJjZSBleHRlbmRzIE1vZGVsCnsKICAgIHByb3RlY3RlZCAkZmlsbGFibGUgPSBbJ251bWJlcicsICdmb3J3YXJkaW5nX251bWJlcicsICdkZXNjcmlwdGlvbiddOwoKICAgIHB1YmxpYyBmdW5jdGlvbiBsZWFkcygpCiAgICB7CiAgICAgICAgcmV0dXJuICR0aGlzLT5oYXNNYW55KCdBcHBcTGVhZCcpOwogICAgfQp9Cg==</textarea>
+<textarea class="saurus-file" data-file="app/Lead.php" data-mode="php">PD9waHAKCm5hbWVzcGFjZSBBcHA7Cgp1c2UgSWxsdW1pbmF0ZVxEYXRhYmFzZVxFbG9xdWVudFxNb2RlbDsKdXNlIEFwcFxMZWFkU291cmNlOwp1c2UgREI7CgpjbGFzcyBMZWFkIGV4dGVuZHMgTW9kZWwKewogICAgcHJvdGVjdGVkICRmaWxsYWJsZSA9IFsnY2FsbGVyX251bWJlcicsICdjaXR5JywgJ3N0YXRlJywgJ2NhbGxlcl9uYW1lJywgJ2NhbGxfc2lkJ107CgogICAgcHVibGljIGZ1bmN0aW9uIGxlYWRTb3VyY2UoKQogICAgewogICAgICAgIHJldHVybiAkdGhpcy0+YmVsb25nc1RvKCdBcHBcTGVhZFNvdXJjZScpOwogICAgfQoKICAgIHB1YmxpYyBzdGF0aWMgZnVuY3Rpb24gYnlMZWFkU291cmNlKCkKICAgIHsKICAgICAgICAkbGVhZHNCeVNvdXJjZQogICAgICAgICAgICA9IERCOjp0YWJsZSgnbGVhZHMnKQogICAgICAgICAgICAtPmpvaW4oJ2xlYWRfc291cmNlcycsICdsZWFkcy5sZWFkX3NvdXJjZV9pZCcsICc9JywgJ2xlYWRfc291cmNlcy5pZCcpCiAgICAgICAgICAgIC0+c2VsZWN0KAogICAgICAgICAgICAgICAgREI6OnJhdygnY291bnQoMSkgYXMgbGVhZF9jb3VudCcpLAogICAgICAgICAgICAgICAgJ2xlYWRfc291cmNlcy5kZXNjcmlwdGlvbicsCiAgICAgICAgICAgICAgICAnbGVhZF9zb3VyY2VzLm51bWJlcicKICAgICAgICAgICAgKQogICAgICAgICAgICAtPmdyb3VwQnkoCiAgICAgICAgICAgICAgICAnbGVhZF9zb3VyY2VfaWQnLAogICAgICAgICAgICAgICAgJ2xlYWRfc291cmNlcy5kZXNjcmlwdGlvbicsCiAgICAgICAgICAgICAgICAnbGVhZF9zb3VyY2VzLm51bWJlcicKICAgICAgICAgICAgKQogICAgICAgICAgICAtPm9yZGVyQnkoJ2xlYWRfY291bnQnLCAnREVTQycpCiAgICAgICAgICAgIC0+b3JkZXJCeSgnbGVhZF9zb3VyY2VzLmRlc2NyaXB0aW9uJywgJ0RFU0MnKQogICAgICAgICAgICAtPmdldCgpOwoKICAgICAgICByZXR1cm4gJGxlYWRzQnlTb3VyY2U7CiAgICB9CgogICAgcHVibGljIHN0YXRpYyBmdW5jdGlvbiBieUNpdHkoKQogICAgewogICAgICAgICRsZWFkc0J5Q2l0eQogICAgICAgICAgICA9IERCOjp0YWJsZSgnbGVhZHMnKQogICAgICAgICAgICAtPmpvaW4oJ2xlYWRfc291cmNlcycsICdsZWFkcy5sZWFkX3NvdXJjZV9pZCcsICc9JywgJ2xlYWRfc291cmNlcy5pZCcpCiAgICAgICAgICAgIC0+c2VsZWN0KERCOjpyYXcoJ2NvdW50KDEpIGFzIGxlYWRfY291bnQnKSwgJ2xlYWRzLmNpdHknKQogICAgICAgICAgICAtPmdyb3VwQnkoJ2xlYWRzLmNpdHknKQogICAgICAgICAgICAtPmdldCgpOwoKICAgICAgICByZXR1cm4gJGxlYWRzQnlDaXR5OwogICAgfQp9Cg==</textarea>
+<textarea class="saurus-file" data-file="app/Http/Controllers/LeadController.php" data-mode="php">PD9waHAKCm5hbWVzcGFjZSBBcHBcSHR0cFxDb250cm9sbGVyczsKCnVzZSBBcHBcSHR0cFxSZXF1ZXN0czsKdXNlIEFwcFxMZWFkOwp1c2UgQXBwXExlYWRTb3VyY2U7CnVzZSBEQjsKdXNlIElsbHVtaW5hdGVcSHR0cFxSZXF1ZXN0Owp1c2UgVHdpbGlvXFJlc3RcQ2xpZW50Owp1c2UgVHdpbGlvXFR3aW1sOwoKY2xhc3MgTGVhZENvbnRyb2xsZXIgZXh0ZW5kcyBDb250cm9sbGVyCnsKCiAgICAvKioKICAgICAqIFR3aWxpbyBDbGllbnQKICAgICAqLwogICAgcHJvdGVjdGVkICRfdHdpbGlvQ2xpZW50OwoKICAgIHB1YmxpYyBmdW5jdGlvbiBfX2NvbnN0cnVjdChDbGllbnQgJHR3aWxpb0NsaWVudCkKICAgIHsKICAgICAgICAkdGhpcy0+X3R3aWxpb0NsaWVudCA9ICR0d2lsaW9DbGllbnQ7CiAgICB9CgogICAgLyoqCiAgICAgKiBEaXNwbGF5IGEgbGlzdGluZyBvZiBsZWFkcwogICAgICogQHBhcmFtIFJlcXVlc3QgJHJlcXVlc3QKICAgICAqIEByZXR1cm4gUmVzcG9uc2Ugd2l0aCBhbGwgZm91bmQgbGVhZHMKICAgICAqLwogICAgcHVibGljIGZ1bmN0aW9uIGRhc2hib2FyZChSZXF1ZXN0ICRyZXF1ZXN0KQogICAgewogICAgICAgICRjb250ZXh0ID0gWwogICAgICAgICAgICAnbGVhZFNvdXJjZXMnID0+IExlYWRTb3VyY2U6OmFsbCgpLAogICAgICAgICAgICAnYXBwU2lkJyA9PiAkdGhpcy0+X2FwcFNpZCgpCiAgICAgICAgXTsKCiAgICAgICAgcmV0dXJuIHJlc3BvbnNlKCktPnZpZXcoJ2xlYWRzLmluZGV4JywgJGNvbnRleHQpOwogICAgfQoKICAgIC8qKgogICAgICogRW5kcG9pbnQgd2hpY2ggc3RvcmUgYSBuZXcgbGVhZCB3aXRoIGl0cyBsZWFkIHNvdXJjZSBhbmQgZm9yd2FyZCB0aGUgY2FsbAogICAgICoKICAgICAqIEBwYXJhbSAgUmVxdWVzdCAkcmVxdWVzdCBJbnB1dCBkYXRhCiAgICAgKiBAcmV0dXJuIFJlc3BvbnNlIFR3aW1sIHRvIHJlZGlyZWN0IGNhbGwgdG8gdGhlIGZvcndhcmRpbmcgbnVtYmVyCiAgICAgKi8KICAgIHB1YmxpYyBmdW5jdGlvbiBzdG9yZShSZXF1ZXN0ICRyZXF1ZXN0KQogICAgewogICAgICAgICRsZWFkU291cmNlID0gTGVhZFNvdXJjZTo6d2hlcmUoWydudW1iZXInID0+ICRyZXF1ZXN0LT5pbnB1dCgnVG8nKV0pCiAgICAgICAgICAgIC0+Zmlyc3QoKTsKICAgICAgICAkbGVhZCA9IG5ldyBMZWFkKCk7CiAgICAgICAgJGxlYWQtPmxlYWRTb3VyY2UoKS0+YXNzb2NpYXRlKCRsZWFkU291cmNlLT5pZCk7CgogICAgICAgICRsZWFkLT5jaXR5ID0gJHRoaXMtPl9ub3JtYWxpemVOYW1lKCRyZXF1ZXN0LT5pbnB1dCgnRnJvbUNpdHknKSk7CiAgICAgICAgJGxlYWQtPnN0YXRlID0gJHRoaXMtPl9ub3JtYWxpemVOYW1lKCRyZXF1ZXN0LT5pbnB1dCgnRnJvbVN0YXRlJykpOwoKICAgICAgICAkbGVhZC0+Y2FsbGVyX251bWJlciA9ICRyZXF1ZXN0LT5pbnB1dCgnRnJvbScpOwogICAgICAgICRsZWFkLT5jYWxsZXJfbmFtZSA9ICRyZXF1ZXN0LT5pbnB1dCgnQ2FsbGVyTmFtZScpOwogICAgICAgICRsZWFkLT5jYWxsX3NpZCA9ICRyZXF1ZXN0LT5pbnB1dCgnQ2FsbFNpZCcpOwoKICAgICAgICAkbGVhZC0+c2F2ZSgpOwoKICAgICAgICAkZm9yd2FyZE1lc3NhZ2UgPSBuZXcgVHdpbWwoKTsKICAgICAgICAkZm9yd2FyZE1lc3NhZ2UtPmRpYWwoJGxlYWRTb3VyY2UtPmZvcndhcmRpbmdfbnVtYmVyKTsKCiAgICAgICAgcmV0dXJuIHJlc3BvbnNlKCRmb3J3YXJkTWVzc2FnZSwgMjAxKQogICAgICAgICAgICAtPmhlYWRlcignQ29udGVudC1UeXBlJywgJ2FwcGxpY2F0aW9uL3htbCcpOwogICAgfQoKICAgIC8qKgogICAgICogRGlzcGxheSBhbGwgbGVhZCBzb3VyY2VzIGFzIEpTT04sIGdyb3VwZWQgYnkgbGVhZCBzb3VyY2UKICAgICAqCiAgICAgKiBAcGFyYW0gIFJlcXVlc3QgJHJlcXVlc3QKICAgICAqIEByZXR1cm4gUmVzcG9uc2UKICAgICAqLwogICAgcHVibGljIGZ1bmN0aW9uIHN1bW1hcnlCeUxlYWRTb3VyY2UoKQogICAgewogICAgICAgIHJldHVybiByZXNwb25zZSgpLT5qc29uKExlYWQ6OmJ5TGVhZFNvdXJjZSgpKTsKICAgIH0KCiAgICAvKioKICAgICAqIERpc3BsYXkgYWxsIGxlYWQgc291cmNlcyBhcyBKU09OLCBncm91cGVkIGJ5IGNpdHkKICAgICAqCiAgICAgKiBAcGFyYW0gIFJlcXVlc3QgJHJlcXVlc3QKICAgICAqIEByZXR1cm4gUmVzcG9uc2UKICAgICAqLwogICAgcHVibGljIGZ1bmN0aW9uIHN1bW1hcnlCeUNpdHkoKQogICAgewogICAgICAgIHJldHVybiByZXNwb25zZSgpLT5qc29uKExlYWQ6OmJ5Q2l0eSgpKTsKICAgIH0KCiAgICAvKioKICAgICAqIFRoZSBUd2lsaW8gVHdpTUwgQXBwIFNJRCB0byB1c2UKICAgICAqIEByZXR1cm4gc3RyaW5nCiAgICAgKi8KICAgIHByaXZhdGUgZnVuY3Rpb24gX2FwcFNpZCgpCiAgICB7CiAgICAgICAgJGFwcFNpZCA9IGNvbmZpZygnYXBwLnR3aWxpbycpWydUV0lMSU9fQVBQX1NJRCddOwoKICAgICAgICBpZiAoaXNzZXQoJGFwcFNpZCkpIHsKICAgICAgICAgICAgcmV0dXJuICRhcHBTaWQ7CiAgICAgICAgfQoKICAgICAgICByZXR1cm4gJHRoaXMtPl9maW5kT3JDcmVhdGVDYWxsVHJhY2tpbmdBcHAoKTsKICAgIH0KCiAgICBwcml2YXRlIGZ1bmN0aW9uIF9maW5kT3JDcmVhdGVDYWxsVHJhY2tpbmdBcHAoKQogICAgewogICAgICAgICRleGlzdGluZ0FwcCA9ICR0aGlzLT5fdHdpbGlvQ2xpZW50LT5hcHBsaWNhdGlvbnMtPnJlYWQoCiAgICAgICAgICAgIGFycmF5KAogICAgICAgICAgICAgICAgImZyaWVuZGx5TmFtZSIgPT4gJ0NhbGwgdHJhY2tpbmcgYXBwJwogICAgICAgICAgICApCiAgICAgICAgKTsKICAgICAgICBpZiAoJGV4aXN0aW5nQXBwKSB7CiAgICAgICAgICAgIHJldHVybiAkZXhpc3RpbmdBcHBbMF0tPnNpZCgpOwogICAgICAgIH0KCiAgICAgICAgJG5ld0FwcCA9ICR0aGlzLT5fdHdpbGlvQ2xpZW50LT5hcHBsaWNhdGlvbnMKICAgICAgICAgICAgLT5jcmVhdGUoJ0NhbGwgdHJhY2tpbmcgYXBwJyk7CgogICAgICAgIHJldHVybiAkbmV3QXBwLT5zaWQ7CiAgICB9CgogICAgcHJpdmF0ZSBmdW5jdGlvbiBfbm9ybWFsaXplTmFtZSgkdG9Ob3JtYWxpemUpCiAgICB7CiAgICAgICAgaWYgKGlzX251bGwoJHRvTm9ybWFsaXplKSkgewogICAgICAgICAgICByZXR1cm4gJyc7CiAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgcmV0dXJuICR0b05vcm1hbGl6ZTsKICAgICAgICB9CiAgICB9Cn0K</textarea>
+<textarea class="saurus-file" data-file="public/js/pieCharts.js" data-mode="javascript">CiQuZ2V0SlNPTignL2xlYWQvc3VtbWFyeS1ieS1sZWFkLXNvdXJjZScsIGZ1bmN0aW9uKHJlc3VsdCkgewogICAgc3VtbWFyeUJ5TGVhZFNvdXJjZURhdGEgPSBfLm1hcChyZXN1bHQsIGZ1bmN0aW9uKGxlYWRTb3VyY2VEYXRhUG9pbnQpIHsKICAgICAgICByZXR1cm4gewogICAgICAgICAgICB2YWx1ZTogbGVhZFNvdXJjZURhdGFQb2ludC5sZWFkX2NvdW50LAogICAgICAgICAgICBjb2xvcjogJ2hzbCgnICsgKDE4MCAqIGxlYWRTb3VyY2VEYXRhUG9pbnQubGVhZF9jb3VudC8gcmVzdWx0Lmxlbmd0aCkgKyAnLCAxMDAlLCA1MCUpJywKICAgICAgICAgICAgbGFiZWw6IGxlYWRTb3VyY2VEYXRhUG9pbnQuZGVzY3JpcHRpb24sCiAgICAgICAgfTsKICAgIH0pOwogICAgdmFyIGJ5TGVhZFNvdXJjZUNvbnRleHQgPSAkKCIjcGllLWJ5LWxlYWQtc291cmNlIikuZ2V0KDApLmdldENvbnRleHQoIjJkIik7CiAgICB2YXIgYnlMZWFkU291cmNlQ2hhcnQgPSBuZXcgQ2hhcnQoYnlMZWFkU291cmNlQ29udGV4dCkuUGllKHN1bW1hcnlCeUxlYWRTb3VyY2VEYXRhKTsKfSk7CgokLmdldEpTT04oJy9sZWFkL3N1bW1hcnktYnktY2l0eScsIGZ1bmN0aW9uKHJlc3VsdCkgewogICAgc3VtbWFyeUJ5Q2l0eURhdGEgPSBfLm1hcChyZXN1bHQsIGZ1bmN0aW9uKGNpdHlEYXRhUG9pbnQpIHsKICAgICAgICByZXR1cm4gewogICAgICAgICAgICB2YWx1ZTogY2l0eURhdGFQb2ludC5sZWFkX2NvdW50LAogICAgICAgICAgICBjb2xvcjogJ2hzbCgnICsgKDE4MCAqIGNpdHlEYXRhUG9pbnQubGVhZF9jb3VudC8gcmVzdWx0Lmxlbmd0aCkgKyAnLCAxMDAlLCA1MCUpJywKICAgICAgICAgICAgbGFiZWw6IGNpdHlEYXRhUG9pbnQuY2l0eQogICAgICAgIH07CiAgICB9KTsKICAgIHZhciBieUNpdHlDb250ZXh0ID0gJCgiI3BpZS1ieS1jaXR5IikuZ2V0KDApLmdldENvbnRleHQoIjJkIik7CiAgICB2YXIgYnlDaXR5Q2hhcnQgPSBuZXcgQ2hhcnQoYnlDaXR5Q29udGV4dCkuUGllKHN1bW1hcnlCeUNpdHlEYXRhKTsKfSk7Cg==</textarea>
+</div>
+</div><div class="saurus-overview"><ul></ul></div></div><div class="saurus-code"><div class="file-path"><span class="crumb-container"></span><i class="fa fa-fw fa-folder"></i></div><div class="saurus-editor"></div></div><div class="saurus-explorer"><div class="saurus-file-list"></div><a href="https://github.com/TwilioDevEd/call-tracking-laravel" target="_blank" class="explorer-get-code"> <i class="fa fa-lg fa-github-square"> </i>View Code on GitHub</a></div></div></div></div><script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script><script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script><script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script><script src="ace/ace.js"></script><script src="ace/theme-monokai.js"></script><script src="viewsaurus.js"></script></body></html>

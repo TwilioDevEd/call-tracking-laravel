@@ -2,7 +2,8 @@
 <hr/>
 <div class="row">
     <div class="col-lg-8">
-        {!! Html::link('https://www.twilio.com/user/account/apps/' . $appSid, 'App configuration', ['class' => 'btn btn-default']) !!}
+        {!! Html::link('https://www.twilio.com/user/account/apps/' . $appSid, 'App
+         configuration', ['class' => 'btn btn-default', 'target' => '_blank']) !!}
         <table class="table">
             <thead>
                 <th>Lead source</th>

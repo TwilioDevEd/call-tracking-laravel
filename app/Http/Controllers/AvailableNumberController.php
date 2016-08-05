@@ -2,13 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Twilio\Rest\Client;
 
 class AvailableNumberController extends Controller
 {
+
+    /**
+     * Twilio Client
+     */
+    protected $_twilioClient;
+
+    public function __construct(Client $twilioClient)
+    {
+        $this->_twilioClient = $twilioClient;
+    }
+
     /**
      * Display numbers available for purchase. Fetched from the API
      *
@@ -17,20 +27,21 @@ class AvailableNumberController extends Controller
      */
     public function index(Request $request)
     {
-        $twilio = \App::make('Twilio');
-
         $areaCode = $request->input('areaCode');
 
-        $numbers = $twilio
-            ->account
-            ->available_phone_numbers
-            ->getList('US', 'Local', ['AreaCode' => $areaCode])
-            ->available_phone_numbers;
+        $numbers = $this->_twilioClient->availablePhoneNumbers->getContext("US")
+            ->local->stream(
+                [
+                    'areaCode' => $areaCode
+                ]
+            );
 
         return response()->view(
             'available_numbers.index',
-            ['numbers' => $numbers,
-             'areaCode' => $areaCode]
+            [
+                'numbers' => $numbers,
+                'areaCode' => $areaCode
+            ]
         );
     }
 }

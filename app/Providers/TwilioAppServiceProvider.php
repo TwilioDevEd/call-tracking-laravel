@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Twilio\Rest\Client;
 
 class TwilioAppServiceProvider extends ServiceProvider
 {
@@ -13,10 +14,24 @@ class TwilioAppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $token = config('app.twilio')['TWILIO_AUTH_TOKEN'];
-        $accountSid = config('app.twilio')['TWILIO_ACCOUNT_SID'];
 
-        $twilio = new \Services_Twilio($accountSid, $token);
-        $this->app->instance('Twilio', $twilio);
+        $accountSid = config('app.twilio')['TWILIO_ACCOUNT_SID']
+        or die("TWILIO_ACCOUNT_SID is not set in the environment");
+        $authToken = config('app.twilio')['TWILIO_AUTH_TOKEN']
+        or die("TWILIO_AUTH_TOKEN is not set in the environment");
+
+        $twilioClient = new Client($accountSid, $authToken);
+
+        $this->app->instance(Client::class, $twilioClient);
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return [Client::class];
     }
 }

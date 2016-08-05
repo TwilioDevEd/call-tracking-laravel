@@ -15,11 +15,11 @@
         <tbody>
             @foreach ($numbers as $number)
                 <tr>
-                    <td> {{ $number->friendly_name }} </td>
+                    <td> {{ $number->friendlyName }} </td>
                     <td> {{ $number->region }} </td>
                     <td>
                         {!! Form::open(['url' => route('lead_source.store')]) !!}
-                        {!! Form::hidden('phoneNumber', $number->phone_number) !!}
+                        {!! Form::hidden('phoneNumber', $number->phoneNumber) !!}
                         {!! Form::submit('Purchase', ['class' => 'btn btn-primary btn-xs']) !!}
                         {!! Form::close() !!}
                     </td>

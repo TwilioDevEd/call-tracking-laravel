@@ -2,20 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use DB;
-
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\Lead;
 use App\LeadSource;
+use DB;
+use Illuminate\Http\Request;
+use Twilio\Rest\Client;
+use Twilio\Twiml;
 
 class LeadController extends Controller
 {
+
+    /**
+     * Twilio Client
+     */
+    protected $_twilioClient;
+
+    public function __construct(Client $twilioClient)
+    {
+        $this->_twilioClient = $twilioClient;
+    }
+
     /**
      * Display a listing of leads
-     *
-     * @return Response
+     * @param Request $request
+     * @return Response with all found leads
      */
     public function dashboard(Request $request)
     {
@@ -28,14 +39,15 @@ class LeadController extends Controller
     }
 
     /**
-     * Store a new lead with its lead source and forward the call
+     * Endpoint which store a new lead with its lead source and forward the call
      *
-     * @param  Request  $request
-     * @return Response
+     * @param  Request $request Input data
+     * @return Response Twiml to redirect call to the forwarding number
      */
     public function store(Request $request)
     {
-        $leadSource = LeadSource::where(['number' => $request->input('To')])->first();
+        $leadSource = LeadSource::where(['number' => $request->input('To')])
+            ->first();
         $lead = new Lead();
         $lead->leadSource()->associate($leadSource->id);
 
@@ -48,15 +60,17 @@ class LeadController extends Controller
 
         $lead->save();
 
-        $forwardMessage = new \Services_Twilio_Twiml();
+        $forwardMessage = new Twiml();
         $forwardMessage->dial($leadSource->forwarding_number);
 
-        return response($forwardMessage, 201)->header('Content-Type', 'application/xml');
+        return response($forwardMessage, 201)
+            ->header('Content-Type', 'application/xml');
     }
+
     /**
      * Display all lead sources as JSON, grouped by lead source
      *
-     * @param  Request  $request
+     * @param  Request $request
      * @return Response
      */
     public function summaryByLeadSource()
@@ -67,7 +81,7 @@ class LeadController extends Controller
     /**
      * Display all lead sources as JSON, grouped by city
      *
-     * @param  Request  $request
+     * @param  Request $request
      * @return Response
      */
     public function summaryByCity()
@@ -81,27 +95,30 @@ class LeadController extends Controller
      */
     private function _appSid()
     {
-        $twilio = \App::make('Twilio');
         $appSid = config('app.twilio')['TWILIO_APP_SID'];
 
         if (isset($appSid)) {
             return $appSid;
         }
 
-        $matchingAppsIter = $twilio
-            ->account
-            ->applications
-            ->getIterator(0, 50, ['FriendlyName' => 'Call tracking app']);
+        return $this->_findOrCreateCallTrackingApp();
+    }
 
-        $matchingApps = iterator_to_array($matchingAppsIter);
-
-        if (empty($matchingApps)) {
-            return $twilio->account->applications->create(
-                ['friendly_name' => 'Call tracking app']
-            )->sid;
-        } else {
-            return $matchingApps[0]->sid;
+    private function _findOrCreateCallTrackingApp()
+    {
+        $existingApp = $this->_twilioClient->applications->read(
+            array(
+                "friendlyName" => 'Call tracking app'
+            )
+        );
+        if ($existingApp) {
+            return $existingApp[0]->sid();
         }
+
+        $newApp = $this->_twilioClient->applications
+            ->create('Call tracking app');
+
+        return $newApp->sid;
     }
 
     private function _normalizeName($toNormalize)
