@@ -29,7 +29,7 @@ class AvailableNumberController extends Controller
     {
         $areaCode = $request->input('areaCode');
 
-        $numbers = $this->_twilioClient->availablePhoneNumbers->getContext("US")
+        $numbers = $this->_twilioClient->availablePhoneNumbers("US")
             ->local->stream(
                 [
                     'areaCode' => $areaCode
