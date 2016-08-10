@@ -18,12 +18,11 @@ class AvailableNumberControllerTest extends TestCase
         $mockNumbers = [$mockNumber];
 
         $mockTwilioClient = Mockery::mock(Client::class);
-        $mockTwilioClient->availablePhoneNumbers = Mockery::mock();
 
         $mockUsPhones = Mockery::mock();
-        $mockTwilioClient->availablePhoneNumbers
-            ->shouldReceive("getContext")
-            ->withAnyArgs()
+        $mockTwilioClient
+            ->shouldReceive("availablePhoneNumbers")
+            ->withAnyArgs("US")
             ->andReturn($mockUsPhones);
 
         $mockUsPhones->local = Mockery::mock();
