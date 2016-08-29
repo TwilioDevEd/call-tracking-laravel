@@ -111,8 +111,8 @@ class LeadController extends Controller
                 "friendlyName" => 'Call tracking app'
             )
         );
-        if ($existingApp) {
-            return $existingApp[0]->sid();
+        if (count($existingApp)) {
+            return $existingApp[0]->sid;
         }
 
         $newApp = $this->_twilioClient->applications
