@@ -22,7 +22,7 @@ class CreateLead extends Migration
                 $table->string('call_sid');
                 $table->timestamps();
 
-                $table->integer('lead_source_id');
+                $table->integer('lead_source_id')->unsigned();
                 $table->foreign('lead_source_id')
                     ->references('id')
                     ->on('lead_sources')
