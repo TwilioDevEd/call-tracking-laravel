@@ -137,7 +137,7 @@ class LeadSourceController extends Controller
                 "friendlyName" => 'Call tracking app'
             )
         );
-        if ($existingApp) {
+        if (count($existingApp)) {
             return $existingApp[0]->sid;
         }
 
